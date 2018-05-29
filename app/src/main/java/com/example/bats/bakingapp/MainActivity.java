@@ -1,5 +1,6 @@
 package com.example.bats.bakingapp;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,11 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.bats.bakingapp.Adapter.MyAdapter;
+import com.example.bats.bakingapp.Adapter.MainBakingAdapter;
 import com.example.bats.bakingapp.Models.Network.RecipeClient;
 import com.example.bats.bakingapp.Models.Recipe;
 import com.example.bats.bakingapp.Utils.Constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -20,31 +22,35 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainBakingAdapter.recipeClickListener{
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private MainBakingAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    List<Recipe> recipes;
+    ArrayList<Recipe> recipes;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.context = this;
+
         mRecyclerView = findViewById(R.id.recipe_card_view);
-        mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setHasFixedSize(true);
 
-        createRetrofitBuilder();
 
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(recipes);
+        mAdapter = new MainBakingAdapter(context, this );
         mRecyclerView.setAdapter(mAdapter);
 
+
+        createRetrofitBuilder();
 
     }
 
@@ -63,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 Toast.makeText(MainActivity.this, "Success" + response.body(), Toast.LENGTH_LONG).show();
-                recipes = response.body();
+                recipes = (ArrayList<Recipe>) response.body();
+                mAdapter.setRecipeData(recipes);
+                mAdapter.notifyDataSetChanged();
                 Log.i("", "ff" + recipes);
 
 
@@ -78,4 +86,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onRecipeCardClick(int clickedOnPos, Recipe clickedOnRecipe) {
+        Toast.makeText(MainActivity.this, "pos " + clickedOnRecipe, Toast.LENGTH_LONG).show();
+    }
 }
