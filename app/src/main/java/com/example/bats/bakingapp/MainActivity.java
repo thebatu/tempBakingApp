@@ -3,8 +3,10 @@ package com.example.bats.bakingapp;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
     private RecyclerView.LayoutManager mLayoutManager;
     ArrayList<Recipe> recipes;
     Context context;
+    private StaggeredGridLayoutManager gaggeredGridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,10 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
+        GridLayoutManager gridLayout  = new GridLayoutManager(context, 3);
+
+        mRecyclerView.setLayoutManager(gaggeredGridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
 
