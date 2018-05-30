@@ -6,14 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.bats.bakingapp.Models.Recipe;
 import com.example.bats.bakingapp.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by bats on 5/28/18.
@@ -52,8 +50,9 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
 
     @Override
     public void onBindViewHolder(MainBaking holder, int position) {
-         Recipe recipe = mRecipe.get(position);
-        holder.tv.setText(recipe.getName());
+        Recipe recipe = mRecipe.get(position);
+        holder.itemTitle.setText(recipe.getName());
+        holder.itemServings.setText(String.valueOf(recipe.getServings()));
 
 
     }
@@ -76,14 +75,16 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
 
     public class MainBaking extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cv;
-        TextView tv;
+        TextView itemTitle;
+        TextView itemServings;
 
         public MainBaking(View itemView) {
             super(itemView);
 
             cv = itemView.findViewById(R.id.mainCardView);
-//            cv.setOnClickListener(this);
-            tv = itemView.findViewById(R.id.itemTitle);
+            itemTitle = itemView.findViewById(R.id.itemTitle);
+            itemServings = itemView.findViewById(R.id.itemServings);
+
             itemView.setOnClickListener(this);
         }
         @Override
