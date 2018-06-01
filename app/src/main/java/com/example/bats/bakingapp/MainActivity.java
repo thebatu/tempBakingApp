@@ -1,6 +1,7 @@
 package com.example.bats.bakingapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,6 +15,7 @@ import com.example.bats.bakingapp.Adapter.MainBakingAdapter;
 import com.example.bats.bakingapp.Models.Network.RecipeClient;
 import com.example.bats.bakingapp.Models.Recipe;
 import com.example.bats.bakingapp.Utils.Constants;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,24 +44,25 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
 
         mRecyclerView = findViewById(R.id.recipe_card_view);
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
-        GridLayoutManager gridLayout  = new GridLayoutManager(context, 3);
+        // use a layout manager
+        //mLayoutManager = new LinearLayoutManager(this);
+        //GridLayoutManager gridLayout  = new GridLayoutManager(context, 3);
+        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(1, 1);
 
         mRecyclerView.setLayoutManager(gaggeredGridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-
 
         // specify an adapter (see also next example)
         mAdapter = new MainBakingAdapter(context, this );
         mRecyclerView.setAdapter(mAdapter);
 
-
         createRetrofitBuilder();
 
     }
 
+    /**
+     * create a retofit builder to fetch the main Json from the net
+     */
     private void createRetrofitBuilder() {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(Constants.baking_json)
@@ -80,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
                 mAdapter.notifyDataSetChanged();
                 Log.i("", "ff" + recipes);
 
-
             }
 
             @Override
@@ -92,8 +94,18 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
     }
 
 
+    /**
+     * callback for MainBakingAdapter on a recipe click
+     * @param clickedOnPos  position of the card
+     * @param clickedOnRecipe   the recipe object that was clicked on.
+     */
     @Override
     public void onRecipeCardClick(int clickedOnPos, Recipe clickedOnRecipe) {
-        Toast.makeText(MainActivity.this, "pos " + clickedOnRecipe, Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this, " " + clickedOnRecipe.getName(), Toast.LENGTH_LONG).show();
+        Gson gson = new Gson();
+        Intent intent = new Intent(this, DetailsRecipeActivity.class);
+        intent.putExtra("recipe", gson.toJson(clickedOnRecipe));
+        startActivity(intent);
+
     }
 }

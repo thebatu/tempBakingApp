@@ -1,15 +1,18 @@
 package com.example.bats.bakingapp.Adapter;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bats.bakingapp.Models.Recipe;
 import com.example.bats.bakingapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -22,7 +25,6 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
 
     private ArrayList<Recipe> mRecipe;
     private Context context;
-    Recipe recipe;
 
     private final recipeClickListener mRecipeClickLis;
 
@@ -54,6 +56,15 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
         holder.itemTitle.setText(recipe.getName());
         holder.itemServings.setText(String.valueOf(recipe.getServings()));
 
+        //Load image if exists otherwise load a place holder
+        if (!recipe.getImage().isEmpty()){
+            Picasso.with(context).load(recipe.getImage()).into(holder.itemImage);
+        }else{
+            holder.itemImage.setImageResource(R.drawable.cutting);
+        }
+
+
+
 
     }
 
@@ -75,6 +86,7 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
 
     public class MainBaking extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cv;
+        ImageView itemImage;
         TextView itemTitle;
         TextView itemServings;
 
@@ -84,6 +96,7 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
             cv = itemView.findViewById(R.id.mainCardView);
             itemTitle = itemView.findViewById(R.id.itemTitle);
             itemServings = itemView.findViewById(R.id.itemServings);
+            itemImage = itemView.findViewById(R.id.itemImage);
 
             itemView.setOnClickListener(this);
         }

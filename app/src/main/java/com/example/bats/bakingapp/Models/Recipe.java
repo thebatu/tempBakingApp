@@ -18,23 +18,6 @@ public class Recipe {
     private String image;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public void setId(int id) {
         this.id = id;
     }
