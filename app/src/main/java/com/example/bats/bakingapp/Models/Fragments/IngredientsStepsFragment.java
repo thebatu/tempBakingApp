@@ -16,6 +16,7 @@ import com.example.bats.bakingapp.R;
 public class IngredientsStepsFragment extends Fragment{
 
     private ViewPager mPager;
+    String recipe;
 
 
     @Nullable
@@ -29,8 +30,10 @@ public class IngredientsStepsFragment extends Fragment{
 //        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         // Instantiate a ViewPager and a PagerAdapter.
-        mPager = (ViewPager) view.findViewById(R.id.pager);
 
+        recipe = getArguments().getString("recipe_string");
+
+        mPager = (ViewPager) view.findViewById(R.id.pager);
 
         TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getFragmentManager());
 
@@ -53,13 +56,27 @@ public class IngredientsStepsFragment extends Fragment{
         }
 
         @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getString(R.string.ingredients);
+                case 1:
+                    return getString(R.string.steps);
+                default:
+                    return getString(R.string.na);
+            }
+        }
+
+        @Override
         public Fragment getItem(int position) {
+            Bundle bundle = new Bundle();
+            bundle.putString("recipe_string", recipe);
+
             IngredientsListFragment firstFragment =  new IngredientsListFragment();
-            //firstFragment.setPagerNavigationInterface(ScreenSlidePagerActivity.this);
+            firstFragment.setArguments(bundle);
 
             StepsListFragment secondFragment = new StepsListFragment();
-            //secondFragment.setPagerNavigationInterface(ScreenSlidePagerActivity.this);
-
+            secondFragment.setArguments(bundle);
 
             switch (position) {
                 case 0:

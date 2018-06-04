@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                Toast.makeText(MainActivity.this, "Success" + response.body(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, "Success" + response.body(), Toast.LENGTH_LONG).show();
                 recipes = (ArrayList<Recipe>) response.body();
                 mAdapter.setRecipeData(recipes);
                 mAdapter.notifyDataSetChanged();
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Failed" + t.getMessage(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(MainActivity.this, "Failed" + t.getMessage(), Toast.LENGTH_LONG).show();
                 Log.i("", "ff" + t.getMessage());
             }
         });
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
      */
     @Override
     public void onRecipeCardClick(int clickedOnPos, Recipe clickedOnRecipe) {
-        Toast.makeText(MainActivity.this, " " + clickedOnRecipe.getName(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(MainActivity.this, " " + clickedOnRecipe.getName(), Toast.LENGTH_LONG).show();
         Gson gson = new Gson();
         Intent intent = new Intent(this, DetailsRecipeActivity.class);
         intent.putExtra("recipe", gson.toJson(clickedOnRecipe));

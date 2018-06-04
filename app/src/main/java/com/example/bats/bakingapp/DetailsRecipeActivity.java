@@ -3,6 +3,7 @@ package com.example.bats.bakingapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.bats.bakingapp.Models.Fragments.IngredientsStepsFragment;
 import com.example.bats.bakingapp.Models.Recipe;
@@ -16,12 +17,17 @@ public class DetailsRecipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details_recipe);
 
         Gson gson = new Gson();
-        String strObj = getIntent().getStringExtra("recipe");
-        Recipe recipe = gson.fromJson(strObj, Recipe.class);
+        String recipeString = getIntent().getStringExtra("recipe");
+        Recipe recipe = gson.fromJson(recipeString, Recipe.class);
+
+//        Toast.makeText(this, "Hudaaa  " + recipeString, Toast.LENGTH_LONG).show();
+
+
+        Bundle bundle = new Bundle();
+        bundle.putString("recipe_string", recipeString);
 
         IngredientsStepsFragment ingredientsStepsFragment = new IngredientsStepsFragment();
-//        ingredientsStepsFragment.setRecipeId(id);
-//        ingredientsStepsFragment.setRecipeName(name);
+        ingredientsStepsFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.ingredients_steps_fragment, ingredientsStepsFragment).commit();
 
 
