@@ -5,74 +5,77 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.FragmentPagerAdapter;
+import com.example.bats.bakingapp.R;
+
 
 public class IngredientsStepsFragment extends Fragment{
 
     private ViewPager mPager;
-    private PagerAdapter myPagerAdapter;
-
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.ingredients_steps_fragment, container, false);
-
+        View view = inflater.inflate(R.layout.ingredients_steps_pager_layout, container, false);
 
 //        context = inflater.getContext();
+//
+//        android.support.v7.widget.Toolbar toolbar = view.findViewById(R.id.toolbar);
+//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) view.findViewById(R.id.pager);
 
-        // Instantiate a ViewPager and a PagerAdapter.
-       // mPager.setAdapter(new myPagerAdapter(getActivity().getSupportFragmentManager()));
 
+        TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getFragmentManager());
 
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mPager);
 
+        tabLayout.setupWithViewPager(mPager);
+        mPager.setAdapter(tabsPagerAdapter);
 
         return view;
 
-
     }
 
-//    private class myPagerAdapter extends FragmentPagerAdapter {
-//
-//        public myPagerAdapter(FragmentManager fm){
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            FirstPagerFragment firstFragment = FirstPagerFragment.newInstance();
-//            firstFragment.setPagerNavigationInterface(ScreenSlidePagerActivity.this);
-//
-//            SecondPagerFragment secondFragment = SecondPagerFragment.newInstance();
-//            secondFragment.setPagerNavigationInterface(ScreenSlidePagerActivity.this);
-//
-//
-//            switch (position) {
-//                case 0:
-//                    return firstFragment;
-//                case 1:
-//                    return secondFragment;
-//                default:
-//                    return firstFragment;
-//            }
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return 3;
-//        }
-//    }
+    private class TabsPagerAdapter extends FragmentPagerAdapter {
+        private int NUM_ITEMS = 2;
+
+
+        public TabsPagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            IngredientsListFragment firstFragment =  new IngredientsListFragment();
+            //firstFragment.setPagerNavigationInterface(ScreenSlidePagerActivity.this);
+
+            StepsListFragment secondFragment = new StepsListFragment();
+            //secondFragment.setPagerNavigationInterface(ScreenSlidePagerActivity.this);
+
+
+            switch (position) {
+                case 0:
+                    return firstFragment;
+                case 1:
+                    return secondFragment;
+                default:
+                    return firstFragment;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+    }
 
 
 
