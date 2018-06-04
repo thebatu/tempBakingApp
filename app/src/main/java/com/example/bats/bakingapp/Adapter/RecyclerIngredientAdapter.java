@@ -40,8 +40,6 @@ public class RecyclerIngredientAdapter extends RecyclerView.Adapter<RecyclerIngr
         holder.ingredients_name.setText(current_ingredient.getIngredient());
         holder.ingredients_quantity.setText(String.valueOf(current_ingredient.getQuantity()));
         holder.ingredients_measure.setText(current_ingredient.getMeasure());
-
-
     }
 
     @Override
@@ -49,11 +47,6 @@ public class RecyclerIngredientAdapter extends RecyclerView.Adapter<RecyclerIngr
         if (ingredients == null) {return 0;}
         return ingredients.size();
     }
-
-    public void setDdata (Recipe recipe){
-        ingredients = recipe.getIngredients();
-    }
-
 
 
     public class IngredientsViewHolder extends RecyclerView.ViewHolder {

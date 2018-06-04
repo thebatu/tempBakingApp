@@ -20,9 +20,6 @@ public class DetailsRecipeActivity extends AppCompatActivity {
         String recipeString = getIntent().getStringExtra("recipe");
         Recipe recipe = gson.fromJson(recipeString, Recipe.class);
 
-//        Toast.makeText(this, "Hudaaa  " + recipeString, Toast.LENGTH_LONG).show();
-
-
         Bundle bundle = new Bundle();
         bundle.putString("recipe_string", recipeString);
 
