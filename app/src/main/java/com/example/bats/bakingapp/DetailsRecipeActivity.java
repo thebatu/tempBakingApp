@@ -6,10 +6,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.bats.bakingapp.Models.Fragments.IngredientsStepsFragment;
+import com.example.bats.bakingapp.Models.Fragments.StepsListFragment;
 import com.example.bats.bakingapp.Models.Recipe;
+import com.example.bats.bakingapp.Models.Steps;
 import com.google.gson.Gson;
 
-public class DetailsRecipeActivity extends AppCompatActivity {
+public class DetailsRecipeActivity extends AppCompatActivity implements StepsListFragment.OnStepClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,12 @@ public class DetailsRecipeActivity extends AppCompatActivity {
         IngredientsStepsFragment ingredientsStepsFragment = new IngredientsStepsFragment();
         ingredientsStepsFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.ingredients_steps_fragment, ingredientsStepsFragment).commit();
+
+
+    }
+
+    @Override
+    public void onStepClickListener(Steps step) {
 
 
     }
