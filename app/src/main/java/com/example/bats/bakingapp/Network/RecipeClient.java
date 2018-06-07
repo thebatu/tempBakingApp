@@ -1,4 +1,4 @@
-package com.example.bats.bakingapp.Models.Network;
+package com.example.bats.bakingapp.Network;
 
 import com.example.bats.bakingapp.Models.Recipe;
 import java.util.List;

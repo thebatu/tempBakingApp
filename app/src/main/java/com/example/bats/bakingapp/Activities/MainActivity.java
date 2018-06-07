@@ -1,19 +1,17 @@
-package com.example.bats.bakingapp;
+package com.example.bats.bakingapp.Activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.bats.bakingapp.Adapter.MainBakingAdapter;
-import com.example.bats.bakingapp.Models.Network.RecipeClient;
+import com.example.bats.bakingapp.Network.RecipeClient;
 import com.example.bats.bakingapp.Models.Recipe;
+import com.example.bats.bakingapp.R;
 import com.example.bats.bakingapp.Utils.Constants;
 import com.google.gson.Gson;
 

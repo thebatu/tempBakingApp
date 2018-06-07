@@ -1,4 +1,4 @@
-package com.example.bats.bakingapp.Models.Fragments;
+package com.example.bats.bakingapp.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

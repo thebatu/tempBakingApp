@@ -1,10 +1,12 @@
-package com.example.bats.bakingapp.Models.Fragments;
+package com.example.bats.bakingapp.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +18,17 @@ import com.example.bats.bakingapp.Models.Steps;
 import com.example.bats.bakingapp.R;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.StepOnclickListener {
 
+    private static final String TAG = StepsListFragment.class.getSimpleName();
+
     RecyclerView stepsRecycelerView;
     RecyclerStepsAdapter recyclerStepsAdapter;
     private OnStepClickListener onStepClickListener;
+    public Recipe recipe;
 
     public StepsListFragment(){
 
@@ -30,8 +36,21 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
 
 
     public interface OnStepClickListener {
-        void onStepClickListener(Steps clickedOnStep);
+        void onStepClickListener(Steps clickedOnStep, Recipe recipe);
     }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try{
+            onStepClickListener = (OnStepClickListener) context;
+        }catch (Exception e) {
+            Log.d(TAG, "onAttach Error in StepsListFragment: " + e.getMessage());
+
+        }
+    }
+
 
     @Nullable
     @Override
@@ -41,7 +60,7 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
 
         String string_recipe = getArguments().getString("recipe_string");
         Gson gson = new Gson();
-        Recipe recipe = gson.fromJson(string_recipe, Recipe.class);
+        recipe = gson.fromJson(string_recipe, Recipe.class);
 
         stepsRecycelerView = rootView.findViewById(R.id.steps_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -60,6 +79,6 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
         clickedOnStep.getId();
         Toast.makeText(getLayoutInflater().getContext(), "asdasd  " + clickedOnStep.getId(), Toast.LENGTH_LONG).show();
 
-        onStepClickListener.onStepClickListener(clickedOnStep);
+        onStepClickListener.onStepClickListener(clickedOnStep, recipe);
     }
 }

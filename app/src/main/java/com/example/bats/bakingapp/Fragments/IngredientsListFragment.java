@@ -1,19 +1,15 @@
-package com.example.bats.bakingapp.Models.Fragments;
+package com.example.bats.bakingapp.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bats.bakingapp.Adapter.RecyclerIngredientAdapter;
-import com.example.bats.bakingapp.MainActivity;
 import com.example.bats.bakingapp.Models.Recipe;
 import com.example.bats.bakingapp.R;
 import com.google.gson.Gson;
@@ -49,8 +45,6 @@ public class IngredientsListFragment extends Fragment {
         return rootView;
 
     }
-
-
 
 
 }
