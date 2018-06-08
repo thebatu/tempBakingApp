@@ -1,9 +1,11 @@
 package com.example.bats.bakingapp.Fragments;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,38 +38,61 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StepDetailFragment extends Fragment{
+import static android.support.constraint.Constraints.TAG;
+
+public class StepDetailFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.simple_exo_player) SimpleExoPlayerView exoPlayer;
     @BindView(R.id.left_arrow) ImageButton left_arrow;
     @BindView(R.id.right_arrow) ImageButton right_arrow;
     @BindView(R.id.tv_step_description) TextView tv_step_desciption;
+    private StepChangeClickListener stepChangeClickListener;
     private SimpleExoPlayer simpleExoPlayer;
     private List<Steps> stepsList;
-    int step_index = 0;
+    int step_index;
     private long position = 0;
     Uri uri;
 
+    public StepDetailFragment() {}
 
-    public StepDetailFragment() {
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.right_arrow:
+                if (step_index + 1 == stepsList.size()) {
+                    Toast.makeText(getActivity(), "Recipe Completed", Toast.LENGTH_SHORT).show();
+                } else {
+                    stepChangeClickListener.stepChangeClickListener(step_index + 1);
+                }
+            case R.id.left_arrow:
+                if (step_index + 1 == stepsList.size()) {
+                    Toast.makeText(getActivity(), "Recipe Completed", Toast.LENGTH_SHORT).show();
+                } else {
+                    stepChangeClickListener.stepChangeClickListener(step_index - 1);
+                }
+            default:
+
+        }
     }
 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
         ButterKnife.bind(this, rootView);
 
-        String string_recipe = getArguments().getString("recipe_string");
+        //String string_recipe = getArguments().getString("recipe_string");
         String string_step = getArguments().getString("step_string");
 
-        Gson gson = new Gson();
-        Recipe recipe = gson.fromJson(string_recipe, Recipe.class);
+        //Gson gson = new Gson();
+        //Recipe recipe = gson.fromJson(string_recipe, Recipe.class);
         Steps step = gson.fromJson(string_step, Steps.class);
 
         stepsList = recipe.getSteps();
-        step_index = step.getId();
+        //step_index = step.getId() + 1;
 
         position = C.TIME_UNSET;
 
@@ -75,14 +100,25 @@ public class StepDetailFragment extends Fragment{
 
         initExoPlayer(uri);
 
+        right_arrow.setOnClickListener(this);
+        left_arrow.setOnClickListener(this);
+
         return rootView;
 
 
     }
 
+    public void setStepsList(String recipe){
+        Gson gson = new Gson();
+        Recipe recipe_obj = gson.fromJson(recipe, Recipe.class);
+        stepsList = recipe_obj.getSteps();
+    }
+
+
+
     private void initExoPlayer(Uri uri){
         if (simpleExoPlayer == null) {
-            exoPlayer .requestFocus();
+            exoPlayer.requestFocus();
 
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -99,6 +135,34 @@ public class StepDetailFragment extends Fragment{
             }
             simpleExoPlayer.prepare(mediaSource);
             simpleExoPlayer.setPlayWhenReady(true);
+
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+
+
+    public void setStepData(int step_index) {
+        this.step_index = step_index;
+
+    }
+
+    public interface StepChangeClickListener{
+        void  stepChangeClickListener(int newPOS);
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            stepChangeClickListener = (StepChangeClickListener) context;
+        } catch (Exception e) {
+            Log.d(TAG, "onAttach: " + e.getMessage());
         }
     }
 

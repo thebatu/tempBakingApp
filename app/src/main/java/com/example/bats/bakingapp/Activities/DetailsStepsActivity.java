@@ -11,28 +11,39 @@ import com.example.bats.bakingapp.Models.Steps;
 import com.example.bats.bakingapp.R;
 import com.google.gson.Gson;
 
-public class DetailsStepsActivity extends AppCompatActivity  {
+public class DetailsStepsActivity extends AppCompatActivity implements StepDetailFragment.StepChangeClickListener  {
+
+    private int mStepIndex;
+    String step_string;
+    String recipe_string;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_steps);
 
-
-        String step_string = getIntent().getStringExtra("step");
-        String recipe_string = getIntent().getStringExtra("recipe");
-
-        Bundle bundle = new Bundle();
-        bundle.putString("step_string", step_string);
-        bundle.putString("recipe_string", recipe_string);
-
-        Toast.makeText(this, "In Details Activity  " + step_string , Toast.LENGTH_LONG).show();
+        step_string = getIntent().getStringExtra("step");
+        recipe_string = getIntent().getStringExtra("recipe");
 
         if (savedInstanceState == null) {
             StepDetailFragment stepDetailFragment = new StepDetailFragment();
-            stepDetailFragment.setArguments(bundle);
+            stepDetailFragment.setStepsList(recipe_string);
             getSupportFragmentManager().beginTransaction().add(R.id.frag_steps, stepDetailFragment).commit();
         }
 
     }
+
+    @Override
+    public void stepChangeClickListener(int newPOS) {
+        Toast.makeText(this, "In Details Activity  " + newPOS , Toast.LENGTH_LONG).show();
+        int step = mStepIndex + 1;
+        StepDetailFragment stepDetailFragment = new StepDetailFragment();
+        stepDetailFragment.setStepData(step);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frag_steps, stepDetailFragment).commit();
+    }
+
+
+
+
 }

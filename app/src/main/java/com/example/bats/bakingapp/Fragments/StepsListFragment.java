@@ -77,7 +77,6 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
     @Override
     public void onClick(Steps clickedOnStep) {
         clickedOnStep.getId();
-        Toast.makeText(getLayoutInflater().getContext(), "asdasd  " + clickedOnStep.getId(), Toast.LENGTH_LONG).show();
 
         onStepClickListener.onStepClickListener(clickedOnStep, recipe);
     }
