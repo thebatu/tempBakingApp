@@ -1,8 +1,10 @@
 package com.example.bats.bakingapp.Fragments;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,6 +35,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -54,6 +57,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     private long position = 0;
     Uri uri;
     String string_recipe;
+    String videoURL;
 
     public StepDetailFragment() {}
 
@@ -71,26 +75,63 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 //        Gson gson = new Gson();
 //        Recipe recipe = gson.fromJson(string_recipe, Recipe.class);
 //        Steps step = gson.fromJson(string_step, Steps.class);
-
 //        stepsList = recipe.getSteps();
         //step_index = step.getId() + 1;
+
+
+        int orientation = getResources().getConfiguration().orientation;
+        int minSize = getResources().getConfiguration().smallestScreenWidthDp;
+
+        if (orientation == 2 && minSize < 600) {
+            tv_step_desciption.setVisibility(View.GONE);
+        } else if (orientation == 1) {
+            tv_step_desciption.setVisibility(View.VISIBLE);
+        }
 
 
         tv_step_desciption.setText(tv_step_desciptionString);
 
         position = C.TIME_UNSET;
 
-//        uri = Uri.parse(step.getVideoURL()).buildUpon().build();
-
-        if (uri != null){
+        if (videoURL != null &&  !videoURL.isEmpty()){
+            Uri uri = Uri.parse(videoURL).buildUpon().build();
             initExoPlayer(uri);
         }
 
         right_arrow.setOnClickListener(this);
         left_arrow.setOnClickListener(this);
 
-        return rootView;
+        if (savedInstanceState == null) {
+            if (videoURL != null) {
+                if (!videoURL.equals("")) {
+                    Uri uri = Uri.parse(videoURL).buildUpon().build();
+                    initExoPlayer(uri);
+                }else{
+                    exoPlayer.hideController();
+                    exoPlayer.setDefaultArtwork(BitmapFactory.decodeResource(getContext().getResources(),R.drawable.novideo));
+                }
+            }
+            tv_step_desciption.setText(tv_step_desciptionString);
+        } else {
+            position = savedInstanceState.getLong("video_state");
+            stepsList = (List) savedInstanceState.getParcelableArrayList("stepsReceived");
+            videoURL = savedInstanceState.getString("videoUrl");
+            if (videoURL != null) {
+                if (!videoURL.equals("")) {
+                    uri = Uri.parse(videoURL).buildUpon().build();
+                    initExoPlayer(uri);
+                }
+            }
+            tv_step_desciption.setText(savedInstanceState.getString("stepDescription"));
+        }
 
+
+
+
+
+
+
+        return rootView;
 
     }
 
@@ -151,9 +192,16 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+        initExoPlayer(uri);
     }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (!videoURL.equals("")) {
+            simpleExoPlayer.stop();
+        }
+    }
 
     public void setStepData(int step_position) {
 
@@ -161,6 +209,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         Steps actualStep = stepsList.get(step_index);
         if (actualStep.getVideoURL() != null && !actualStep.getVideoURL().equals("")) {
 
+            videoURL = actualStep.getVideoURL();
             uri = Uri.parse(actualStep.getVideoURL()).buildUpon().build();
         }
 
@@ -185,4 +234,15 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("videoURI", videoURL);
+        outState.putString("tv_step_desciptionString",tv_step_desciptionString);
+        long position = simpleExoPlayer.getCurrentPosition();
+        outState.putLong("video_play_last_position", position);
+        outState.putParcelableArrayList("stepsReceived", (ArrayList<? extends Parcelable>) stepsList);
+        super.onSaveInstanceState(outState);
+
+
+    }
 }
