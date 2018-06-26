@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
         Gson gson = new Gson();
         Intent intent = new Intent(this, DetailsRecipeActivity.class);
         intent.putExtra("recipe", gson.toJson(clickedOnRecipe));
+        intent.putExtra("recipe_pos", clickedOnPos);
         startActivity(intent);
 
     }

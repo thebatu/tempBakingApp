@@ -36,7 +36,7 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
 
 
     public interface OnStepClickListener {
-        void onStepClickListener(Steps clickedOnStep, Recipe recipe);
+        void onStepClickListener(Steps clickedOnStep, Recipe recipe, int position);
     }
 
 
@@ -75,9 +75,8 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
     }
 
     @Override
-    public void onClick(Steps clickedOnStep) {
+    public void onClick(Steps clickedOnStep, int position) {
         clickedOnStep.getId();
-
-        onStepClickListener.onStepClickListener(clickedOnStep, recipe);
+        onStepClickListener.onStepClickListener(clickedOnStep, recipe, position);
     }
 }

@@ -46,15 +46,53 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     @BindView(R.id.left_arrow) ImageButton left_arrow;
     @BindView(R.id.right_arrow) ImageButton right_arrow;
     @BindView(R.id.tv_step_description) TextView tv_step_desciption;
+    String tv_step_desciptionString;
     private StepChangeClickListener stepChangeClickListener;
     private SimpleExoPlayer simpleExoPlayer;
     private List<Steps> stepsList;
     int step_index;
     private long position = 0;
     Uri uri;
+    String string_recipe;
 
     public StepDetailFragment() {}
 
+
+
+    @Nullable
+    @Override
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
+        ButterKnife.bind(this, rootView);
+
+//        string_recipe = getArguments().getString("recipe_string");
+//        String string_step = getArguments().getString("step_string");
+//
+//        Gson gson = new Gson();
+//        Recipe recipe = gson.fromJson(string_recipe, Recipe.class);
+//        Steps step = gson.fromJson(string_step, Steps.class);
+
+//        stepsList = recipe.getSteps();
+        //step_index = step.getId() + 1;
+
+
+        tv_step_desciption.setText(tv_step_desciptionString);
+
+        position = C.TIME_UNSET;
+
+//        uri = Uri.parse(step.getVideoURL()).buildUpon().build();
+
+        if (uri != null){
+            initExoPlayer(uri);
+        }
+
+        right_arrow.setOnClickListener(this);
+        left_arrow.setOnClickListener(this);
+
+        return rootView;
+
+
+    }
 
 
     @Override
@@ -65,12 +103,14 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
                     Toast.makeText(getActivity(), "Recipe Completed", Toast.LENGTH_SHORT).show();
                 } else {
                     stepChangeClickListener.stepChangeClickListener(step_index + 1);
+                    return;
                 }
             case R.id.left_arrow:
                 if (step_index + 1 == stepsList.size()) {
                     Toast.makeText(getActivity(), "Recipe Completed", Toast.LENGTH_SHORT).show();
                 } else {
                     stepChangeClickListener.stepChangeClickListener(step_index - 1);
+                    return;
                 }
             default:
 
@@ -78,42 +118,11 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     }
 
 
-    @Nullable
-    @Override
-    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
-        ButterKnife.bind(this, rootView);
-
-        //String string_recipe = getArguments().getString("recipe_string");
-        String string_step = getArguments().getString("step_string");
-
-        //Gson gson = new Gson();
-        //Recipe recipe = gson.fromJson(string_recipe, Recipe.class);
-        Steps step = gson.fromJson(string_step, Steps.class);
-
-        stepsList = recipe.getSteps();
-        //step_index = step.getId() + 1;
-
-        position = C.TIME_UNSET;
-
-        uri = Uri.parse(step.getVideoURL()).buildUpon().build();
-
-        initExoPlayer(uri);
-
-        right_arrow.setOnClickListener(this);
-        left_arrow.setOnClickListener(this);
-
-        return rootView;
-
-
-    }
-
     public void setStepsList(String recipe){
         Gson gson = new Gson();
         Recipe recipe_obj = gson.fromJson(recipe, Recipe.class);
         stepsList = recipe_obj.getSteps();
     }
-
 
 
     private void initExoPlayer(Uri uri){
@@ -146,8 +155,17 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
 
 
-    public void setStepData(int step_index) {
-        this.step_index = step_index;
+    public void setStepData(int step_position) {
+
+        this.step_index = step_position;
+        Steps actualStep = stepsList.get(step_index);
+        if (actualStep.getVideoURL() != null && !actualStep.getVideoURL().equals("")) {
+
+            uri = Uri.parse(actualStep.getVideoURL()).buildUpon().build();
+        }
+
+        tv_step_desciptionString = actualStep.getDescription();
+
 
     }
 

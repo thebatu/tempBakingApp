@@ -22,7 +22,7 @@ public class RecyclerStepsAdapter extends RecyclerView.Adapter<RecyclerStepsAdap
 
 
     public interface StepOnclickListener{
-        void onClick(Steps clickedOnStep);
+        void onClick(Steps clickedOnStep, int position);
     }
 
     public RecyclerStepsAdapter(Context context, Recipe recipe, StepOnclickListener stepOnClickListener) {
@@ -66,7 +66,7 @@ public class RecyclerStepsAdapter extends RecyclerView.Adapter<RecyclerStepsAdap
 
         @Override
         public void onClick(View view) {
-            mStepOnClick.onClick(stepsList.get(getAdapterPosition()));
+            mStepOnClick.onClick(stepsList.get(getAdapterPosition()), getAdapterPosition());
         }
     }
 }

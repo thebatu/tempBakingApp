@@ -42,7 +42,7 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
      * @param recipe    the recipe object
      */
     @Override
-    public void onStepClickListener(Steps step, Recipe recipe) {
+    public void onStepClickListener(Steps step, Recipe recipe, int position) {
         if (step != null) {
             Gson gson = new Gson();
             String step_toString = gson.toJson(step);
@@ -51,6 +51,8 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
             Intent intent = new Intent(this, DetailsStepsActivity.class);
             intent.putExtra("step", step_toString);
             intent.putExtra("recipe", recipe_toString);
+            intent.putExtra("position", position);
+
             startActivity(intent);
         }
         else{
