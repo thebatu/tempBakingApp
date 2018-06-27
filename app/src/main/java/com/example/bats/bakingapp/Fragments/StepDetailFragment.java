@@ -35,6 +35,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     String tv_step_desciptionString;
     private StepChangeClickListener stepChangeClickListener;
     private SimpleExoPlayer simpleExoPlayer;
-    private List<Steps> stepsList;
+    private ArrayList<Steps> stepsList;
     int step_index;
     private long position = 0;
     Uri uri;
@@ -77,7 +79,6 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 //        Steps step = gson.fromJson(string_step, Steps.class);
 //        stepsList = recipe.getSteps();
         //step_index = step.getId() + 1;
-
 
         int orientation = getResources().getConfiguration().orientation;
         int minSize = getResources().getConfiguration().smallestScreenWidthDp;
@@ -106,29 +107,28 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
                 if (!videoURL.equals("")) {
                     Uri uri = Uri.parse(videoURL).buildUpon().build();
                     initExoPlayer(uri);
-                }else{
-                    exoPlayer.hideController();
-                    exoPlayer.setDefaultArtwork(BitmapFactory.decodeResource(getContext().getResources(),R.drawable.novideo));
                 }
-            }
+
+            }else {
+            exoPlayer.hideController();
+            exoPlayer.setDefaultArtwork(BitmapFactory.decodeResource(getContext().getResources(),R.drawable.novideo));
+        }
             tv_step_desciption.setText(tv_step_desciptionString);
         } else {
             position = savedInstanceState.getLong("video_state");
-            stepsList = (List) savedInstanceState.getParcelableArrayList("stepsReceived");
-            videoURL = savedInstanceState.getString("videoUrl");
+            stepsList = savedInstanceState.getParcelableArrayList("stepsReceived");
+            videoURL = savedInstanceState.getString("videoURL");
             if (videoURL != null) {
                 if (!videoURL.equals("")) {
                     uri = Uri.parse(videoURL).buildUpon().build();
                     initExoPlayer(uri);
                 }
+            }else{
+                exoPlayer.setDefaultArtwork(BitmapFactory.decodeResource(getContext().getResources(),R.drawable.novideo));
             }
             tv_step_desciption.setText(savedInstanceState.getString("stepDescription"));
+            String sdafsd = "sdfsdfsdfs";
         }
-
-
-
-
-
 
 
         return rootView;
@@ -142,13 +142,14 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             case R.id.right_arrow:
                 if (step_index + 1 == stepsList.size()) {
                     Toast.makeText(getActivity(), "Recipe Completed", Toast.LENGTH_SHORT).show();
+                    return;
                 } else {
                     stepChangeClickListener.stepChangeClickListener(step_index + 1);
                     return;
                 }
             case R.id.left_arrow:
-                if (step_index + 1 == stepsList.size()) {
-                    Toast.makeText(getActivity(), "Recipe Completed", Toast.LENGTH_SHORT).show();
+                if (step_index == 0) {
+                    Toast.makeText(getActivity(), "You are on step #0", Toast.LENGTH_SHORT).show();
                 } else {
                     stepChangeClickListener.stepChangeClickListener(step_index - 1);
                     return;
@@ -175,11 +176,18 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             LoadControl loadControl = new DefaultLoadControl();
             simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
             exoPlayer.setPlayer(simpleExoPlayer);
-
+            MediaSource mediaSource;
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
-            MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
-                    getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+            if (uri == null) {
+                mediaSource = new ExtractorMediaSource(Uri.EMPTY, new DefaultDataSourceFactory(
+                        getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+            }else {
+                mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
+                        getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+            }
+
+
             if (position != C.TIME_UNSET) {
                 simpleExoPlayer.seekTo(position);
             }
@@ -198,8 +206,10 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     @Override
     public void onStop() {
         super.onStop();
-        if (!videoURL.equals("")) {
-            simpleExoPlayer.stop();
+        if (videoURL != null) {
+            if (!videoURL.equals("")) {
+                simpleExoPlayer.stop();
+            }
         }
     }
 
@@ -236,7 +246,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString("videoURI", videoURL);
+        outState.putString("videoURL", videoURL);
         outState.putString("tv_step_desciptionString",tv_step_desciptionString);
         long position = simpleExoPlayer.getCurrentPosition();
         outState.putLong("video_play_last_position", position);
