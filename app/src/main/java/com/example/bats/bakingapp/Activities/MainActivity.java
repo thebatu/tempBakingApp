@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.example.bats.bakingapp.Adapter.MainBakingAdapter;
 import com.example.bats.bakingapp.Network.RecipeClient;
@@ -42,12 +45,27 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
 
         mRecyclerView = findViewById(R.id.recipe_card_view);
 
+
+        int orientation = getResources().getConfiguration().orientation;
+
+        if (orientation == 2) {
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
+            mRecyclerView.setLayoutManager(gridLayoutManager);
+        }
+
+
+        if (orientation == 1){
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+            mRecyclerView.setLayoutManager(linearLayoutManager);
+        }
+
+
         // use a layout manager
         //mLayoutManager = new LinearLayoutManager(this);
         //GridLayoutManager gridLayout  = new GridLayoutManager(context, 3);
-        gaggeredGridLayoutManager = new StaggeredGridLayoutManager(1, 1);
+        //gaggeredGridLayoutManager = new StaggeredGridLayoutManager(1, 1);
 
-        mRecyclerView.setLayoutManager(gaggeredGridLayoutManager);
+        //mRecyclerView.setLayoutManager(gaggeredGridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
         // specify an adapter (see also next example)

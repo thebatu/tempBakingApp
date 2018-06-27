@@ -16,7 +16,6 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
 
     public final String TAG = DetailsStepsActivity.class.getSimpleName();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +31,18 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
         IngredientsStepsFragment ingredientsStepsFragment = new IngredientsStepsFragment();
         ingredientsStepsFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.ingredients_steps_fragment, ingredientsStepsFragment).commit();
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }
