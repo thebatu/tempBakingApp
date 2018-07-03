@@ -1,50 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_sw600_details_recipe_activity"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipess"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.bats.bakingapp.Activities.DetailsRecipeActivity">
 
-
-    <FrameLayout
-        android:id="@+id/recipe_ingredients_step_desc"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp">
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/recipe_step_instructions"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_ingredients_step_desc"
-        android:layout_width="270dp"
-        android:layout_height="0dp"
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/recipe_ingredients_step_desc"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp" />
+
+            <FrameLayout
+                android:id="@+id/recipe_step_instructions"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_ingredients_step_desc"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp" />
+
+        </RelativeLayout>
+
+
+    </ScrollView>
 
     <FrameLayout
         android:id="@+id/video_explanation"
-        android:layout_width="306dp"
-        android:layout_height="627dp"
+        android:layout_width="584dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/recipe_step_instructions"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_ingredients_step_desc">
+        app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
+

@@ -159,7 +159,6 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         }
     }
 
-
     public void setStepsList(String recipe){
         Gson gson = new Gson();
         Recipe recipe_obj = gson.fromJson(recipe, Recipe.class);
