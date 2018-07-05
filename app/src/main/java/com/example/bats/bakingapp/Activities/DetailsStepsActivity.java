@@ -52,13 +52,12 @@ public class DetailsStepsActivity extends AppCompatActivity implements StepDetai
         bundle.putString("recipe_string", recipe_string);
 
         StepDetailFragment stepDetailFragment = new StepDetailFragment();
+//        stepDetailFragment.setArrowClickListener(this);
+
         stepDetailFragment.setStepsList(recipe_string);
         stepDetailFragment.setStepData(step);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frag_steps, stepDetailFragment).commit();
     }
-
-
-
 
 }

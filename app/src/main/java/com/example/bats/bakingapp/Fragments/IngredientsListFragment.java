@@ -14,10 +14,13 @@ import com.example.bats.bakingapp.Models.Recipe;
 import com.example.bats.bakingapp.R;
 import com.google.gson.Gson;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class IngredientsListFragment extends Fragment {
 
 
-    private RecyclerView ingredientRecyclerView;
+    @BindView(R.id.ingredients_recycler) RecyclerView ingredientRecyclerView;
     private RecyclerIngredientAdapter ingredientRecyclerAdapter;
 
     public IngredientsListFragment(){
@@ -29,12 +32,13 @@ public class IngredientsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.ingredient_list_fragment, container, false);
+        ButterKnife.bind(this, rootView);
 
         String string_recipe = getArguments().getString("recipe_string");
         Gson gson = new Gson();
         Recipe recipe = gson.fromJson(string_recipe, Recipe.class);
 
-        ingredientRecyclerView = rootView.findViewById(R.id.ingredients_recycler);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         ingredientRecyclerView.setLayoutManager(linearLayoutManager);
         ingredientRecyclerView.setHasFixedSize(true);

@@ -9,7 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.example.bats.bakingapp.Adapter.MainBakingAdapter;
 import com.example.bats.bakingapp.Network.RecipeClient;
@@ -21,6 +23,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +33,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements MainBakingAdapter.recipeClickListener{
 
+
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
     private RecyclerView mRecyclerView;
     private MainBakingAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -40,7 +46,9 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
+        progressBar.setVisibility(View.VISIBLE);
         this.context = this;
 
         mRecyclerView = findViewById(R.id.recipe_card_view);
@@ -97,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
                 recipes = (ArrayList<Recipe>) response.body();
                 mAdapter.setRecipeData(recipes);
                 mAdapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
+
                 Log.i("", "ff" + recipes);
 
             }

@@ -52,33 +52,21 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     @BindView(R.id.right_arrow) ImageButton right_arrow;
     @BindView(R.id.tv_step_description) TextView tv_step_desciption;
     String tv_step_desciptionString;
-    private StepChangeClickListener stepChangeClickListener;
+    public StepChangeClickListener stepChangeClickListener;
     private SimpleExoPlayer simpleExoPlayer;
     private ArrayList<Steps> stepsList;
     int step_index;
     private long position = 0;
     Uri uri;
-    String string_recipe;
     String videoURL;
 
     public StepDetailFragment() {}
-
-
 
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
         ButterKnife.bind(this, rootView);
-
-//        string_recipe = getArguments().getString("recipe_string");
-//        String string_step = getArguments().getString("step_string");
-//
-//        Gson gson = new Gson();
-//        Recipe recipe = gson.fromJson(string_recipe, Recipe.class);
-//        Steps step = gson.fromJson(string_step, Steps.class);
-//        stepsList = recipe.getSteps();
-        //step_index = step.getId() + 1;
 
         int orientation = getResources().getConfiguration().orientation;
         int minSize = getResources().getConfiguration().smallestScreenWidthDp;
@@ -224,12 +212,8 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
         tv_step_desciptionString = actualStep.getDescription();
 
-
     }
 
-    public interface StepChangeClickListener{
-        void  stepChangeClickListener(int newPOS);
-    }
 
 
     @Override
@@ -240,6 +224,10 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         } catch (Exception e) {
             Log.d(TAG, "onAttach: " + e.getMessage());
         }
+    }
+
+    public interface StepChangeClickListener{
+        void  stepChangeClickListener(int newPOS);
     }
 
 

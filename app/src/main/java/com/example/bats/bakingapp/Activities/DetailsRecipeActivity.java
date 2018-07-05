@@ -15,7 +15,9 @@ import com.example.bats.bakingapp.Models.Steps;
 import com.example.bats.bakingapp.R;
 import com.google.gson.Gson;
 
-public class DetailsRecipeActivity extends AppCompatActivity implements StepsListFragment.OnStepClickListener {
+public class DetailsRecipeActivity extends AppCompatActivity implements
+        StepsListFragment.OnStepClickListener
+{
 
     public final String TAG = DetailsStepsActivity.class.getSimpleName();
     private int screenSize;
@@ -48,7 +50,6 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
                 StepsListFragment stepsListFragment = new StepsListFragment();
                 stepsListFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().add(R.id.recipe_step_instructions, stepsListFragment).commit();
-
             }
         }
 
@@ -61,7 +62,7 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
 
     /**
      * click listener for steps
-     * @param step  cliked on step
+     * @param step  clicked on step
      * @param recipe    the recipe object
      */
     @Override
@@ -82,6 +83,7 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
             } else {
 
                 StepDetailFragment stepDetailFragment = new StepDetailFragment();
+//                stepDetailFragment.setArrowClickListener(this);
                 stepDetailFragment.setStepsList(recipe_toString);
                 stepDetailFragment.setStepData(position);
                 getSupportFragmentManager().beginTransaction().replace(R.id.video_explanation, stepDetailFragment).commit();
@@ -91,4 +93,5 @@ public class DetailsRecipeActivity extends AppCompatActivity implements StepsLis
             Log.d(TAG, "Step is null " );
         }
     }
+
 }

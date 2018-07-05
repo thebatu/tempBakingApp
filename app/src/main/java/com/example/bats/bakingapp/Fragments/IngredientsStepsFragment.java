@@ -12,10 +12,14 @@ import android.view.ViewGroup;
 import android.support.v4.app.FragmentPagerAdapter;
 import com.example.bats.bakingapp.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class IngredientsStepsFragment extends Fragment{
 
-    private ViewPager mPager;
+    @BindView(R.id.pager) ViewPager mPager;
+    @BindView(R.id.tabs) TabLayout tabLayout;
     String recipe;
 
 
@@ -24,22 +28,15 @@ public class IngredientsStepsFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ingredients_steps_pager_layout, container, false);
 
-//        context = inflater.getContext();
+        ButterKnife.bind(this, view);
 //
 //        android.support.v7.widget.Toolbar toolbar = view.findViewById(R.id.toolbar);
 //        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         // Instantiate a ViewPager and a PagerAdapter.
-
         recipe = getArguments().getString("recipe_string");
-
-        mPager = (ViewPager) view.findViewById(R.id.pager);
-
         TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getFragmentManager());
-
-        TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mPager);
-
         tabLayout.setupWithViewPager(mPager);
         mPager.setAdapter(tabsPagerAdapter);
 
