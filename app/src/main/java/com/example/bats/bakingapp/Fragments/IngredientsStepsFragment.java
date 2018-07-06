@@ -2,6 +2,7 @@ package com.example.bats.bakingapp.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ public class IngredientsStepsFragment extends Fragment{
 
     @BindView(R.id.pager) ViewPager mPager;
     @BindView(R.id.tabs) TabLayout tabLayout;
+
     String recipe;
 
 
