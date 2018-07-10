@@ -1,17 +1,13 @@
 package com.example.bats.bakingapp.Widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.RemoteViews;
-
-import com.example.bats.bakingapp.Activities.MainActivity;
 import com.example.bats.bakingapp.Models.Ingredient;
 import com.example.bats.bakingapp.R;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,23 +16,25 @@ import java.util.List;
  * Implementation of App Widget functionality.
  */
 public class BakingAppWidget extends AppWidgetProvider {
+    SharedPreferences sharedPreferences;
+
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId, String recipeTitle, ArrayList ingredientList) {
+                                int appWidgetId, String recipeTitle, List<Ingredient> ingredientList) {
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-        views.setTextViewText(R.id.appwidget_text, recipeTitle);
+        views.setTextViewText(R.id.appwidget_title, recipeTitle);
+        views.removeAllViews(R.id.widget_container);
 
-        views.removeAllViews(R.id.container_w);
         if (ingredientList!=null){
             for (Ingredient ingredient : ingredientList) {
                 RemoteViews ingredientView = new RemoteViews(context.getPackageName(),
                         R.layout.list_item_ingredient);
-                ingredientView.setTextViewText(R.id.ingredient_name,ingredient.getIngredient());
-                ingredientView.setTextViewText(R.id.ingredient_quantity,ingredient.getQuantity());
-                ingredientView.setTextViewText(R.id.ingredient_measure,ingredient.getMeasure());
-                views.addView(R.id.container_w, ingredientView);
+                ingredientView.setTextViewText(R.id.ingredients_measure,ingredient.getMeasure());
+                ingredientView.setTextViewText(R.id.ingredients_name,ingredient.getIngredient());
+                ingredientView.setTextViewText(R.id.ingredients_quantity,String.valueOf(ingredient.getQuantity()));
+                views.addView(R.id.widget_container, ingredientView);
             }
         }
 
@@ -56,9 +54,9 @@ public class BakingAppWidget extends AppWidgetProvider {
         Ingredient[] arrayIngredient = gson.fromJson(result,Ingredient[].class);
         ingredients = Arrays.asList(arrayIngredient);
         ingredients = new ArrayList<>(ingredients);
-        String recipeName = sharedPreferences.getString("recipe_name",null);
+        String recipeTitle = sharedPreferences.getString("recipe_name",null);
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId, recipeTitle, recipeSteps );
+            updateAppWidget(context, appWidgetManager, appWidgetId, recipeTitle, ingredients );
         }
     }
 
