@@ -1,8 +1,10 @@
 package com.example.bats.bakingapp.Fragments;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,12 +16,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.example.bats.bakingapp.Adapter.RecyclerIngredientAdapter;
 import com.example.bats.bakingapp.Models.Recipe;
 import com.example.bats.bakingapp.R;
 import com.example.bats.bakingapp.Widget.BakingAppWidgetProvider;
+import com.example.bats.bakingapp.Widget.BakingAppWidgetService;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -58,6 +62,35 @@ public class IngredientsListFragment extends Fragment {
 
 
 
+
+
+        //==================================
+
+
+
+        //=================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         btn_widget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,11 +124,25 @@ public class IngredientsListFragment extends Fragment {
                         AppWidgetManager.INVALID_APPWIDGET_ID
                             );
 
-                Log.e("Ids", "Ids" + Arrays.toString(appWidgetIds));
 
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.layout.list_item_ingredient);
-                BakingAppWidgetProvider.updateAppWidgets(getActivity(), appWidgetManager, appWidgetIds, recipeName,
-                        ingredientsList);
+
+//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.layout.list_item_ingredient);
+//                BakingAppWidgetProvider.updateAppWidgets(getActivity(), appWidgetManager, appWidgetIds, recipeName,
+//                        ingredientsList);
+
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, 0);
+
+
+                Intent recipeIntent = new Intent(getActivity(), BakingAppWidgetService.class);
+                wateringIntent.setAction(BakingAppWidgetService.UPDATE_RECIPE_WIDGET);
+                PendingIntent bakingPendingIntent = PendingIntent.getService(getActivity(), 0, recipeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                Intent intent = new Intent(getActivity(), BakingAppWidgetService.class);
+                intent.setAction(BakingAppWidgetService.UPDATE_RECIPE_WIDGET);
+                getActivity().startService(intent);
+
                 Toast.makeText(getActivity(), "Widget Updated", Toast.LENGTH_SHORT).show();
             }
         });

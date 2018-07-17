@@ -34,6 +34,7 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
             for (Ingredient ingredient : ingredientList) {
                 RemoteViews ingredientView = new RemoteViews(context.getPackageName(),
                         R.layout.list_item_ingredient);
+
                 ingredientView.setTextViewText(R.id.ingredients_measure,ingredient.getMeasure());
                 ingredientView.setTextViewText(R.id.ingredients_name,ingredient.getIngredient());
                 ingredientView.setTextViewText(R.id.ingredients_quantity,String.valueOf(ingredient.getQuantity()));
@@ -60,19 +61,20 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
 
-        List<Ingredient> ingredients ;
-        sharedPreferences = context.getSharedPreferences("Shared_preferences",
-                Context.MODE_PRIVATE);
-        Gson gson = new Gson();
-        String result = sharedPreferences.getString("recipe_ingredients",null);
-        Ingredient[] arrayIngredient = gson.fromJson(result,Ingredient[].class);
-        ingredients = Arrays.asList(arrayIngredient);
-        ingredients = new ArrayList<>(ingredients);
-        String recipeTitle = sharedPreferences.getString("recipe_name",null);
-        for (int appWidgetId : appWidgetIds) {
-//            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.layout.baking_app_widget);
-            updateAppWidget(context, appWidgetManager, appWidgetId, recipeTitle, ingredients );
-        }
+//        List<Ingredient> ingredients ;
+//        sharedPreferences = context.getSharedPreferences("Shared_preferences",
+//                Context.MODE_PRIVATE);
+//        Gson gson = new Gson();
+//        String result = sharedPreferences.getString("recipe_ingredients",null);
+//        Ingredient[] arrayIngredient = gson.fromJson(result,Ingredient[].class);
+//        ingredients = Arrays.asList(arrayIngredient);
+//        ingredients = new ArrayList<>(ingredients);
+//        String recipeTitle = sharedPreferences.getString("recipe_name",null);
+//        for (int appWidgetId : appWidgetIds) {
+//            updateAppWidget(context, appWidgetManager, appWidgetId, recipeTitle, ingredients );
+//        }
+
+        BakingAppWidgetService.startActionUpdateRecipeWidget(context);
 
 
     }
