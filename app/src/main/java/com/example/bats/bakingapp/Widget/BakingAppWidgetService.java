@@ -1,12 +1,16 @@
 package com.example.bats.bakingapp.Widget;
 
 import android.app.IntentService;
+import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.example.bats.bakingapp.Models.Ingredient;
@@ -22,17 +26,22 @@ public class BakingAppWidgetService extends IntentService {
 
 
     public static final String SHOW_RECIPE_PAGE = "com.example.bats.bakingapp.action.display_recipe";
-    public static final String UPDATE_RECIPE_WIDGET = "com.example.bats.bakingapp.action.display_recipe";
+    public static final String UPDATE_RECIPE_WIDGET = "com.example.bats.bakingapp.action.update_recipe";
 
     static SharedPreferences sharedPreferences;
+    static Intent my_intent = null;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public BakingAppWidgetService() {
         super("BakingAppWidgetService");
+        if (my_intent != null) {
+            startForegroundService(my_intent);
+        }
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
             if (SHOW_RECIPE_PAGE.equals(action)) {
@@ -46,14 +55,15 @@ public class BakingAppWidgetService extends IntentService {
 
 
 
-    private void handleActionLunchRecipe() {
-
-    }
-
     public static void startActionUpdateRecipeWidget(Context context) {
         Intent intent = new Intent(context, BakingAppWidgetService.class);
         intent.setAction(UPDATE_RECIPE_WIDGET);
-        context.startService(intent);
+        my_intent = intent;
+        ContextCompat.startForegroundService(context , intent);
+    }
+
+    private void handleActionLunchRecipe() {
+
     }
 
 

@@ -76,21 +76,6 @@ public class IngredientsListFragment extends Fragment {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         btn_widget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,29 +104,22 @@ public class IngredientsListFragment extends Fragment {
 
 
 
-                int appWidgetId = bundle.getInt(
-                        AppWidgetManager.EXTRA_APPWIDGET_ID,
-                        AppWidgetManager.INVALID_APPWIDGET_ID
-                            );
-
 
 
 //                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.layout.list_item_ingredient);
 //                BakingAppWidgetProvider.updateAppWidgets(getActivity(), appWidgetManager, appWidgetIds, recipeName,
 //                        ingredientsList);
 
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, 0);
+                Intent intent = new Intent(getActivity(), BakingAppWidgetProvider.class);
+                intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+                int ids[] = AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), BakingAppWidgetService.class));
+                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+                getActivity().sendBroadcast(intent);
 
 
-                Intent recipeIntent = new Intent(getActivity(), BakingAppWidgetService.class);
-                wateringIntent.setAction(BakingAppWidgetService.UPDATE_RECIPE_WIDGET);
-                PendingIntent bakingPendingIntent = PendingIntent.getService(getActivity(), 0, recipeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-                Intent intent = new Intent(getActivity(), BakingAppWidgetService.class);
-                intent.setAction(BakingAppWidgetService.UPDATE_RECIPE_WIDGET);
-                getActivity().startService(intent);
+//                Intent intent = new Intent(getActivity(), BakingAppWidgetService.class);
+//                intent.setAction(BakingAppWidgetService.UPDATE_RECIPE_WIDGET);
+//                getActivity().startService(intent);
 
                 Toast.makeText(getActivity(), "Widget Updated", Toast.LENGTH_SHORT).show();
             }

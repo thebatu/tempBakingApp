@@ -3,9 +3,12 @@ package com.example.bats.bakingapp.Widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
+
 import com.example.bats.bakingapp.Models.Ingredient;
 import com.example.bats.bakingapp.R;
 import com.google.gson.Gson;
@@ -19,9 +22,17 @@ import java.util.List;
 public class BakingAppWidgetProvider extends AppWidgetProvider {
     SharedPreferences sharedPreferences;
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Log.wtf("", "RICK  " );
+        super.onReceive(context, intent);
+        Toast.makeText( context, "on recieve", Toast.LENGTH_SHORT).show();
+        BakingAppWidgetService.startActionUpdateRecipeWidget(context);
+
+    }
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId, String recipeTitle, List<Ingredient> ingredientList) {
+                                       int appWidgetId, String recipeTitle, List<Ingredient> ingredientList) {
 
         // Construct the RemoteViews object
         RemoteViews my_views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
