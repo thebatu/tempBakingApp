@@ -8,13 +8,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.example.bats.bakingapp.Activities.DetailsRecipeActivity;
+import com.example.bats.bakingapp.Activities.DetailsStepsActivity;
 import com.example.bats.bakingapp.Models.Ingredient;
+import com.example.bats.bakingapp.Models.Recipe;
 import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,9 +41,7 @@ public class BakingAppWidgetService extends IntentService {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public BakingAppWidgetService() {
         super("BakingAppWidgetService");
-        if (my_intent != null) {
-            startForegroundService(my_intent);
-        }
+
     }
 
     @Override
@@ -45,7 +49,22 @@ public class BakingAppWidgetService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (SHOW_RECIPE_PAGE.equals(action)) {
-                handleActionLunchRecipe();
+
+
+                String data = (String) intent.getExtras().get("recipe");
+                Bundle bundle = new Bundle();
+                bundle.putString("recipe", data);
+                Intent intent1 = new Intent(getApplicationContext(), DetailsRecipeActivity.class);
+                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent1.putExtra("recipe", data);
+                startActivity(intent1);
+
+//
+//                JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("ingredientJSON"));
+//                String recipeString = getIntent().getStringExtra("recipe");
+//                Recipe recipe = gson.fromJson(recipeString, Recipe.class);
+
+                //handleActionLunchRecipe();
             } else if (UPDATE_RECIPE_WIDGET.equals(action)) {
                 handleActionUpdatePlantWidgets(getApplicationContext());
             }
@@ -54,12 +73,11 @@ public class BakingAppWidgetService extends IntentService {
     }
 
 
-
     public static void startActionUpdateRecipeWidget(Context context) {
         Intent intent = new Intent(context, BakingAppWidgetService.class);
         intent.setAction(UPDATE_RECIPE_WIDGET);
         my_intent = intent;
-        ContextCompat.startForegroundService(context , intent);
+        context.startService(intent);
     }
 
     private void handleActionLunchRecipe() {

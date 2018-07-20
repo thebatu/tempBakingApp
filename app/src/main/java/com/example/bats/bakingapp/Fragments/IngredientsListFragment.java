@@ -60,36 +60,32 @@ public class IngredientsListFragment extends Fragment {
         ingredientRecyclerAdapter = new RecyclerIngredientAdapter(getActivity(), recipe);
         ingredientRecyclerView.setAdapter(ingredientRecyclerAdapter);
 
+        SharedPreferences sharedPreferences = getActivity()
+                .getSharedPreferences("Shared_preferences", Context.MODE_PRIVATE);
 
 
+        String ingredients = gson.toJson(recipe.getIngredients());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-
-        //==================================
-
-
-
-        //=================================
-
-
-
-
-
-
+        editor.putString("recipe_ingredients",ingredients);
+        editor.putString("recipe_name",recipe.getName());
+        editor.putString("recipe", string_recipe);
+        editor.apply();
 
         btn_widget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences = getActivity()
-                        .getSharedPreferences("Shared_preferences", Context.MODE_PRIVATE);
-
-                Gson gson = new Gson();
-
-                String ingredients = gson.toJson(recipe.getIngredients());
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putString("recipe_ingredients",ingredients);
-                editor.putString("recipe_name",recipe.getName());
-                editor.apply();
+//                SharedPreferences sharedPreferences = getActivity()
+//                        .getSharedPreferences("Shared_preferences", Context.MODE_PRIVATE);
+//
+//                Gson gson = new Gson();
+//
+//                String ingredients = gson.toJson(recipe.getIngredients());
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//                editor.putString("recipe_ingredients",ingredients);
+//                editor.putString("recipe_name",recipe.getName());
+//                editor.apply();
 
 //                ComponentName component=new ComponentName(getActivity(),BakingAppWidgetProvider.class);
 
@@ -113,7 +109,7 @@ public class IngredientsListFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), BakingAppWidgetProvider.class);
                 intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
                 int ids[] = AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), BakingAppWidgetService.class));
-                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
                 getActivity().sendBroadcast(intent);
 
 

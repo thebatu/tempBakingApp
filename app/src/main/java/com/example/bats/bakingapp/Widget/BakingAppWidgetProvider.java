@@ -1,5 +1,6 @@
 package com.example.bats.bakingapp.Widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -9,6 +10,8 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.example.bats.bakingapp.Activities.MainActivity;
+import com.example.bats.bakingapp.Fragments.IngredientsListFragment;
 import com.example.bats.bakingapp.Models.Ingredient;
 import com.example.bats.bakingapp.R;
 import com.google.gson.Gson;
@@ -20,16 +23,9 @@ import java.util.List;
  * Implementation of App Widget functionality.
  */
 public class BakingAppWidgetProvider extends AppWidgetProvider {
-    SharedPreferences sharedPreferences;
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Log.wtf("", "RICK  " );
-        super.onReceive(context, intent);
-        Toast.makeText( context, "on recieve", Toast.LENGTH_SHORT).show();
-        BakingAppWidgetService.startActionUpdateRecipeWidget(context);
+    static SharedPreferences sharedPreferences;
 
-    }
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                        int appWidgetId, String recipeTitle, List<Ingredient> ingredientList) {
@@ -39,6 +35,22 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
         my_views.setTextViewText(R.id.appwidget_title, recipeTitle);
         my_views.removeAllViews(R.id.widget_container);
         //my_views.removeAllViews(R.layout.list_item_ingredient);
+
+        sharedPreferences = context.getSharedPreferences("Shared_preferences",
+                Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String result = sharedPreferences.getString("recipe", null);
+
+
+
+        Intent intent = new Intent(context, BakingAppWidgetService.class);
+        intent.setAction(BakingAppWidgetService.SHOW_RECIPE_PAGE);
+        String ingredientJSON = gson.toJson(ingredientList);
+        intent.putExtra("recipe",ingredientJSON);
+
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
+        // Get the layout for the App Widget and attach an on-click listener to the button
+        my_views.setOnClickPendingIntent(R.id.my_widget_main, pendingIntent);
 
 
         if (ingredientList!=null){
@@ -70,23 +82,17 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
 
-//        List<Ingredient> ingredients ;
-//        sharedPreferences = context.getSharedPreferences("Shared_preferences",
-//                Context.MODE_PRIVATE);
-//        Gson gson = new Gson();
-//        String result = sharedPreferences.getString("recipe_ingredients",null);
-//        Ingredient[] arrayIngredient = gson.fromJson(result,Ingredient[].class);
-//        ingredients = Arrays.asList(arrayIngredient);
-//        ingredients = new ArrayList<>(ingredients);
-//        String recipeTitle = sharedPreferences.getString("recipe_name",null);
-//        for (int appWidgetId : appWidgetIds) {
-//            updateAppWidget(context, appWidgetManager, appWidgetId, recipeTitle, ingredients );
-//        }
 
         BakingAppWidgetService.startActionUpdateRecipeWidget(context);
 
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+        Toast.makeText( context, "on recieve Provider", Toast.LENGTH_SHORT).show();
+        BakingAppWidgetService.startActionUpdateRecipeWidget(context);
 
     }
 
