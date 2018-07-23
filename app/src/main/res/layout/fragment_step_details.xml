@@ -23,7 +23,8 @@
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/left_arrow" />
+        app:srcCompat="@drawable/left_arrow"
+        android:contentDescription="@string/left_arrow" />
 
     <ImageButton
         android:id="@+id/right_arrow"
@@ -33,7 +34,8 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/right_arrow" />
+        app:srcCompat="@drawable/right_arrow"
+        android:contentDescription="@string/right_arrow" />
 
     <TextView
         android:id="@+id/tv_step_description"
@@ -42,7 +44,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text="@string/textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

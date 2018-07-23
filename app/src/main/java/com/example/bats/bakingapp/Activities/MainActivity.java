@@ -7,22 +7,20 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
+import android.widget.Toast;
 import com.example.bats.bakingapp.Adapter.MainBakingAdapter;
 import com.example.bats.bakingapp.Network.RecipeClient;
 import com.example.bats.bakingapp.Models.Recipe;
 import com.example.bats.bakingapp.R;
+import com.example.bats.bakingapp.Utils.ApiError;
 import com.example.bats.bakingapp.Utils.Constants;
+import com.example.bats.bakingapp.Utils.ErrorUtils;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -34,13 +32,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements MainBakingAdapter.recipeClickListener{
 
 
+    public static Retrofit.Builder builder = new Retrofit.Builder()
+            .baseUrl(Constants.baking_json)
+            .addConverterFactory(GsonConverterFactory.create());
+
+    public static Retrofit retrofit = builder.build();
+
+
     @BindView(R.id.progress_bar) ProgressBar progressBar;
-    private RecyclerView mRecyclerView;
     private MainBakingAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     ArrayList<Recipe> recipes;
     Context context;
-    private StaggeredGridLayoutManager gaggeredGridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +53,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
         progressBar.setVisibility(View.VISIBLE);
         this.context = this;
 
-        mRecyclerView = findViewById(R.id.recipe_card_view);
-
-
+        RecyclerView mRecyclerView = findViewById(R.id.recipe_card_view);
         int orientation = getResources().getConfiguration().orientation;
 
         if (orientation == 2) {
@@ -68,12 +68,6 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
         }
 
 
-        // use a layout manager
-        //mLayoutManager = new LinearLayoutManager(this);
-        //GridLayoutManager gridLayout  = new GridLayoutManager(context, 3);
-        //gaggeredGridLayoutManager = new StaggeredGridLayoutManager(1, 1);
-
-        //mRecyclerView.setLayoutManager(gaggeredGridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
         // specify an adapter (see also next example)
@@ -88,11 +82,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
      * create a retofit builder to fetch the main Json from the net
      */
     private void createRetrofitBuilder() {
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(Constants.baking_json)
-                .addConverterFactory(GsonConverterFactory.create());
 
-        Retrofit retrofit = builder.build();
 
         //Do the actual request
         RecipeClient recipeClient = retrofit.create(RecipeClient.class);
@@ -101,20 +91,23 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                //Toast.makeText(MainActivity.this, "Success" + response.body(), Toast.LENGTH_LONG).show();
-                recipes = (ArrayList<Recipe>) response.body();
-                mAdapter.setRecipeData(recipes);
-                mAdapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
-
-                Log.i("", "ff" + recipes);
+                if (response.isSuccessful()){
+                    recipes = (ArrayList<Recipe>) response.body();
+                    mAdapter.setRecipeData(recipes);
+                    mAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                }
+                else {
+                    ApiError apiError = ErrorUtils.parseError(response);
+                    Toast.makeText(context, apiError.getMessage() , Toast.LENGTH_LONG).show();
+                }
 
             }
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
-               // Toast.makeText(MainActivity.this, "Failed" + t.getMessage(), Toast.LENGTH_LONG).show();
                 Log.i("", "ff" + t.getMessage());
+                Toast.makeText(context, "Network Error " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -127,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
      */
     @Override
     public void onRecipeCardClick(int clickedOnPos, Recipe clickedOnRecipe) {
-        //Toast.makeText(MainActivity.this, " " + clickedOnRecipe.getName(), Toast.LENGTH_LONG).show();
         Gson gson = new Gson();
         Intent intent = new Intent(this, DetailsRecipeActivity.class);
         intent.putExtra("recipe", gson.toJson(clickedOnRecipe));

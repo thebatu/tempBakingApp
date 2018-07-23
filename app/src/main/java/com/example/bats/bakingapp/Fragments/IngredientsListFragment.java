@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 public class IngredientsListFragment extends Fragment {
 
     @BindView(R.id.ingredients_recycler) RecyclerView ingredientRecyclerView;
-    private RecyclerIngredientAdapter ingredientRecyclerAdapter;
+   // private RecyclerIngredientAdapter ingredientRecyclerAdapter;
     @BindView(R.id.add_widget_btn) Button btn_widget;
     String recipeName;
     ArrayList ingredientsList;
@@ -57,7 +57,7 @@ public class IngredientsListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         ingredientRecyclerView.setLayoutManager(linearLayoutManager);
         ingredientRecyclerView.setHasFixedSize(true);
-        ingredientRecyclerAdapter = new RecyclerIngredientAdapter(getActivity(), recipe);
+        RecyclerIngredientAdapter ingredientRecyclerAdapter = new RecyclerIngredientAdapter(getActivity(), recipe);
         ingredientRecyclerView.setAdapter(ingredientRecyclerAdapter);
 
         SharedPreferences sharedPreferences = getActivity()

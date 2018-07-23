@@ -6,4 +6,7 @@
     <string name="na">na</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="left_arrow">Left Arrow</string>
+    <string name="right_arrow">Right Arrow</string>
+    <string name="textview">TextView</string>
 </resources>

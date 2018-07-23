@@ -2,15 +2,10 @@ package com.example.bats.bakingapp.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.example.bats.bakingapp.Fragments.IngredientsStepsFragment;
 import com.example.bats.bakingapp.Fragments.StepDetailFragment;
-import com.example.bats.bakingapp.Models.Recipe;
-import com.example.bats.bakingapp.Models.Steps;
 import com.example.bats.bakingapp.R;
-import com.google.gson.Gson;
 
 public class DetailsStepsActivity extends AppCompatActivity implements StepDetailFragment.StepChangeClickListener  {
 

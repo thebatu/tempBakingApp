@@ -80,10 +80,6 @@ public class BakingAppWidgetService extends IntentService {
         context.startService(intent);
     }
 
-    private void handleActionLunchRecipe() {
-
-    }
-
 
     public void handleActionUpdatePlantWidgets(Context context) {
 

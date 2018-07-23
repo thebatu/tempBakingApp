@@ -6,17 +6,13 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import com.example.bats.bakingapp.Activities.MainActivity;
-import com.example.bats.bakingapp.Fragments.IngredientsListFragment;
 import com.example.bats.bakingapp.Models.Ingredient;
 import com.example.bats.bakingapp.R;
 import com.google.gson.Gson;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 
 /**
@@ -39,14 +35,15 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
         sharedPreferences = context.getSharedPreferences("Shared_preferences",
                 Context.MODE_PRIVATE);
         Gson gson = new Gson();
-        String result = sharedPreferences.getString("recipe", null);
 
+        String recipe = sharedPreferences.getString("recipe", null);
 
 
         Intent intent = new Intent(context, BakingAppWidgetService.class);
         intent.setAction(BakingAppWidgetService.SHOW_RECIPE_PAGE);
         String ingredientJSON = gson.toJson(ingredientList);
-        intent.putExtra("recipe",ingredientJSON);
+        intent.putExtra("ingredientList",ingredientJSON);
+        intent.putExtra("recipe",recipe);
 
         PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
         // Get the layout for the App Widget and attach an on-click listener to the button
