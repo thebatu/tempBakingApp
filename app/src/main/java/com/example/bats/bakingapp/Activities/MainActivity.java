@@ -31,6 +31,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements MainBakingAdapter.recipeClickListener{
 
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    private MainBakingAdapter mAdapter;
+    ArrayList<Recipe> recipes;
+    Context context;
 
     public static Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(Constants.baking_json)
@@ -38,11 +42,6 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
 
     public static Retrofit retrofit = builder.build();
 
-
-    @BindView(R.id.progress_bar) ProgressBar progressBar;
-    private MainBakingAdapter mAdapter;
-    ArrayList<Recipe> recipes;
-    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
 
         mRecyclerView.setHasFixedSize(true);
 
-        // specify an adapter (see also next example)
+        // specify an adapter
         mAdapter = new MainBakingAdapter(context, this );
         mRecyclerView.setAdapter(mAdapter);
 

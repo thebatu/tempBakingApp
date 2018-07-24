@@ -1,7 +1,6 @@
 package com.example.bats.bakingapp.Adapter;
 
 import android.content.Context;
-import android.support.annotation.DrawableRes;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import com.example.bats.bakingapp.Models.Recipe;
 import com.example.bats.bakingapp.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bats on 5/28/18.
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 
 public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.MainBaking> {
 
-    private ArrayList<Recipe> mRecipe;
+    private List<Recipe> mRecipe;
     private Context context;
 
     private final recipeClickListener mRecipeClickLis;
@@ -58,7 +57,7 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
 
         //Load image if exists otherwise load a place holder
         if (!recipe.getImage().isEmpty()){
-            Picasso.with(context).load(recipe.getImage()).into(holder.itemImage);
+            Picasso.get().load(recipe.getImage()).into(holder.itemImage);
         }else{
             holder.itemImage.setImageResource(R.drawable.cutting);
         }
@@ -68,7 +67,7 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
 
     }
 
-    public void setRecipeData(ArrayList recipe) {
+    public void setRecipeData(List recipe) {
         if (recipe != null) {
             mRecipe = recipe;
         }

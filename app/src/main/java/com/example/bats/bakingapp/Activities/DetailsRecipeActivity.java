@@ -34,7 +34,6 @@ public class DetailsRecipeActivity extends AppCompatActivity implements
         Bundle bundle = new Bundle();
         bundle.putString("recipe_string", recipeString);
 
-
         if (savedInstanceState == null) {
             if (screenSize < 600) {
 
