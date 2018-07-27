@@ -44,6 +44,7 @@ public class IngredientsListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.ingredient_list_fragment, container, false);
         ButterKnife.bind(this, rootView);
 
+        assert getArguments() != null;
         String string_recipe = getArguments().getString("recipe_string");
         Gson gson = new Gson();
         final Recipe recipe = gson.fromJson(string_recipe, Recipe.class);

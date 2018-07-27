@@ -2,6 +2,9 @@ package com.example.bats.bakingapp.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,6 +21,7 @@ import com.example.bats.bakingapp.R;
 import com.example.bats.bakingapp.Utils.ApiError;
 import com.example.bats.bakingapp.Utils.Constants;
 import com.example.bats.bakingapp.Utils.ErrorUtils;
+import com.example.bats.bakingapp.Utils.SimpleIdlingResource;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +47,26 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
     public static Retrofit retrofit = builder.build();
 
 
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+
+
+    @VisibleForTesting
+    @Nullable
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getIdlingResource();
         ButterKnife.bind(this);
 
         progressBar.setVisibility(View.VISIBLE);

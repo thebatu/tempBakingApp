@@ -1,7 +1,6 @@
 package com.example.bats.bakingapp.Widget;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,18 +8,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.example.bats.bakingapp.Activities.DetailsRecipeActivity;
-import com.example.bats.bakingapp.Activities.DetailsStepsActivity;
 import com.example.bats.bakingapp.Models.Ingredient;
-import com.example.bats.bakingapp.Models.Recipe;
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;

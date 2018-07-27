@@ -23,12 +23,10 @@ import java.util.List;
 public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.MainBaking> {
 
     private List<Recipe> mRecipe;
-    private Context context;
 
     private final recipeClickListener mRecipeClickLis;
 
     public MainBakingAdapter (Context context, recipeClickListener listener) {
-        this.context = context;
         mRecipeClickLis = listener;
     }
 

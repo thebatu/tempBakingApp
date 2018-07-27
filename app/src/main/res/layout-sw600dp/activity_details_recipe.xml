@@ -8,6 +8,7 @@
     tools:context="com.example.bats.bakingapp.Activities.DetailsRecipeActivity">
 
     <ScrollView
+        android:id="@+id/details_scroller_tablet"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
@@ -18,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
+            android:id="@+id/relative_tablet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -30,6 +32,7 @@
                 android:layout_marginTop="8dp" />
 
             <FrameLayout
+                android:tag="@string/frameTag"
                 android:id="@+id/recipe_step_instructions"
                 android:layout_width="400dp"
                 android:layout_height="wrap_content"
@@ -38,7 +41,6 @@
                 android:layout_marginTop="8dp" />
 
         </RelativeLayout>
-
 
     </ScrollView>
 

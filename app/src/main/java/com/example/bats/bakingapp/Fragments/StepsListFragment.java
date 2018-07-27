@@ -10,16 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.bats.bakingapp.Adapter.RecyclerStepsAdapter;
 import com.example.bats.bakingapp.Models.Recipe;
 import com.example.bats.bakingapp.Models.Steps;
 import com.example.bats.bakingapp.R;
 import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,7 +70,6 @@ public class StepsListFragment extends Fragment implements RecyclerStepsAdapter.
 
     @Override
     public void onClick(Steps clickedOnStep, int position) {
-        clickedOnStep.getId();
         onStepClickListener.onStepClickListener(clickedOnStep, recipe, position);
     }
 }
