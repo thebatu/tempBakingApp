@@ -23,11 +23,11 @@ import java.util.List;
 public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.MainBaking> {
 
     private List<Recipe> mRecipe;
-
+    Context mContext;
     private final recipeClickListener mRecipeClickLis;
-
     public MainBakingAdapter (Context context, recipeClickListener listener) {
         mRecipeClickLis = listener;
+        mContext = context;
     }
 
     public interface recipeClickListener{
@@ -44,25 +44,37 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
 
         return viewHolder;
 
-
     }
 
     @Override
     public void onBindViewHolder(MainBaking holder, int position) {
         Recipe recipe = mRecipe.get(position);
         holder.itemTitle.setText(recipe.getName());
-        holder.itemServings.setText(String.valueOf(recipe.getServings()));
+        String hold = String.valueOf(recipe.getServings()) + " " + mContext.getString(R.string.servings);
+        holder.itemServings.setText(hold);
 
         //Load image if exists otherwise load a place holder
         if (!recipe.getImage().isEmpty()){
             Picasso.get().load(recipe.getImage()).into(holder.itemImage);
         }else{
-            holder.itemImage.setImageResource(R.drawable.cutting);
+            switch (recipe.getId()){
+                case 1:
+                    holder.itemImage.setImageResource(R.drawable.nutellapie3);
+                    break;
+                case 2:
+                    holder.itemImage.setImageResource(R.drawable.brownie);
+                    break;
+                case 3:
+                    holder.itemImage.setImageResource(R.drawable.yellowcake2);
+                    break;
+                case 4:
+                    holder.itemImage.setImageResource(R.drawable.cheesecake);
+                    break;
+                default:
+                    holder.itemImage.setImageResource(R.drawable.cutting);
+                    break;
+            }
         }
-
-
-
-
     }
 
     public void setRecipeData(List recipe) {
@@ -89,7 +101,6 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
 
         public MainBaking(View itemView) {
             super(itemView);
-
             cv = itemView.findViewById(R.id.mainCardView);
             itemTitle = itemView.findViewById(R.id.itemTitle);
             itemServings = itemView.findViewById(R.id.itemServings);
@@ -104,6 +115,5 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
             mRecipeClickLis.onRecipeCardClick(pos, clickedOnRecipe);
 
         }
-
     }
 }

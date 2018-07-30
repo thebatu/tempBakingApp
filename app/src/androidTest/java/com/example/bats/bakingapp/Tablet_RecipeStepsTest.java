@@ -120,11 +120,7 @@ public class Tablet_RecipeStepsTest {
             SimpleExoPlayer exoPlayer = exoPlayerView.getPlayer();
             int state = exoPlayer.getPlaybackState();
             Boolean isPlaying;
-            if ((state == STATE_BUFFERING) || (state == STATE_READY)) {
-                isPlaying = true;
-            } else {
-                isPlaying = false;
-            }
+            isPlaying = (state == STATE_BUFFERING) || (state == STATE_READY);
             assertThat(isPlaying, matcher);
         }
     }

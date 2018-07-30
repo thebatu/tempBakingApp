@@ -46,10 +46,8 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
 
     public static Retrofit retrofit = builder.build();
 
-
     @Nullable
     private SimpleIdlingResource mIdlingResource;
-
 
     @VisibleForTesting
     @Nullable

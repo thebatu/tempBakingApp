@@ -10,4 +10,5 @@
     <string name="right_arrow">Right Arrow</string>
     <string name="textview">TextView</string>
     <string name="frameTag">frametag</string>
+    <string name="servings"> Servings</string>
 </resources>
