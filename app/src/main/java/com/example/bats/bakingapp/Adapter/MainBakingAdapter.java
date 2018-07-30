@@ -62,7 +62,7 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
                     holder.itemImage.setImageResource(R.drawable.nutellapie3);
                     break;
                 case 2:
-                    holder.itemImage.setImageResource(R.drawable.brownie);
+                    holder.itemImage.setImageResource(R.drawable.brownies3);
                     break;
                 case 3:
                     holder.itemImage.setImageResource(R.drawable.yellowcake2);
