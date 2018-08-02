@@ -7,7 +7,9 @@ import com.example.bats.bakingapp.Fragments.StepDetailFragment;
 import com.example.bats.bakingapp.R;
 
 
-
+/***
+ * class that acts like master class to control stepDetailFragment where video playing is handled.
+ */
 public class DetailsStepsActivity extends AppCompatActivity implements StepDetailFragment.StepChangeClickListener  {
 
     String step_string;
@@ -41,6 +43,8 @@ public class DetailsStepsActivity extends AppCompatActivity implements StepDetai
 
     }
 
+
+    //listener called when clicked on the next previous arrow buttons in exo player layout
     @Override
     public void stepChangeClickListener(int newPOS) {
 

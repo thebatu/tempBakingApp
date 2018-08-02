@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * Created by bats on 5/28/18.
+ * Recycler view for the main Activity which fetches and displays main baking recipes cards.
  *
  */
 
@@ -91,7 +92,6 @@ public class MainBakingAdapter extends RecyclerView.Adapter<MainBakingAdapter.Ma
             return 0;
         }
     }
-
 
     public class MainBaking extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cv;

@@ -40,12 +40,18 @@ import butterknife.ButterKnife;
 
 import static android.support.constraint.Constraints.TAG;
 
+
+/***
+ * the fragment where displaying the video is handled for the tablet or phone. Exoplayer
+ * is instantiated here and released here.
+ */
+
 public class StepDetailFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.simple_exo_player) SimpleExoPlayerView exoPlayer;
     @BindView(R.id.left_arrow) ImageButton left_arrow;
     @BindView(R.id.right_arrow) ImageButton right_arrow;
-    @BindView(R.id.tv_step_description) TextView tv_step_desciption;
+    @BindView(R.id.tv_step_description) TextView tv_step_description;
     String tv_step_desciptionString;
     public StepChangeClickListener stepChangeClickListener;
     private SimpleExoPlayer simpleExoPlayer;
@@ -66,17 +72,18 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         int orientation = getResources().getConfiguration().orientation;
         int minSize = getResources().getConfiguration().smallestScreenWidthDp;
 
+        //handle description visible or not depending on orientation
         if (orientation == 2 && minSize < 600) {
-            tv_step_desciption.setVisibility(View.GONE);
+            tv_step_description.setVisibility(View.GONE);
         } else if (orientation == 1) {
-            tv_step_desciption.setVisibility(View.VISIBLE);
+            tv_step_description.setVisibility(View.VISIBLE);
         }
 
-
-        tv_step_desciption.setText(tv_step_desciptionString);
+        tv_step_description.setText(tv_step_desciptionString);
 
         position = C.TIME_UNSET;
 
+        //build player if null
         if (videoURL != null &&  !videoURL.isEmpty()){
             Uri uri = Uri.parse(videoURL).buildUpon().build();
             initExoPlayer(uri);
@@ -85,6 +92,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         right_arrow.setOnClickListener(this);
         left_arrow.setOnClickListener(this);
 
+        //Exo player logic to handle if there is a URL to play the video or if the URL is null
         if (savedInstanceState == null) {
             if (videoURL != null) {
                 if (!videoURL.equals("")) {
@@ -96,7 +104,8 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             exoPlayer.hideController();
             exoPlayer.setDefaultArtwork(BitmapFactory.decodeResource(getContext().getResources(),R.drawable.novideo));
         }
-            tv_step_desciption.setText(tv_step_desciptionString);
+            tv_step_description.setText(tv_step_desciptionString);
+            //else URL not null, play video
         } else {
             position = savedInstanceState.getLong("video_state");
             stepsList = savedInstanceState.getParcelableArrayList("stepsReceived");
@@ -109,7 +118,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             }else{
                 exoPlayer.setDefaultArtwork(BitmapFactory.decodeResource(getContext().getResources(),R.drawable.novideo));
             }
-            tv_step_desciption.setText(savedInstanceState.getString("stepDescription"));
+            tv_step_description.setText(savedInstanceState.getString("stepDescription"));
             String sdafsd = "sdfsdfsdfs";
         }
 
@@ -119,6 +128,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     }
 
 
+    //left and right arrow click handler for next or previous video
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -142,6 +152,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    //setter for the total steps in a recipe
     public void setStepsList(String recipe){
         Gson gson = new Gson();
         Recipe recipe_obj = gson.fromJson(recipe, Recipe.class);
@@ -149,6 +160,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     }
 
 
+    //init exo player
     private void initExoPlayer(Uri uri){
         if (simpleExoPlayer == null) {
             exoPlayer.requestFocus();
@@ -185,6 +197,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         initExoPlayer(uri);
     }
 
+    //stop exo player
     @Override
     public void onStop() {
         super.onStop();
@@ -195,6 +208,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    //setter for the URL and URI of a video
     public void setStepData(int step_position) {
 
         this.step_index = step_position;
@@ -210,7 +224,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
     }
 
 
-
+    //check if listener is really attached
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

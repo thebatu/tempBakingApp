@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
     ArrayList<Recipe> recipes;
     Context context;
 
+    //instantiate a Retfofit builder
     public static Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl(Constants.baking_json)
             .addConverterFactory(GsonConverterFactory.create());
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
     @Nullable
     private SimpleIdlingResource mIdlingResource;
 
+    //Idling ressources used in a test class.
     @VisibleForTesting
     @Nullable
     public IdlingResource getIdlingResource() {
@@ -67,18 +69,20 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
         getIdlingResource();
         ButterKnife.bind(this);
 
+        //set the progress bar visible
         progressBar.setVisibility(View.VISIBLE);
         this.context = this;
 
         RecyclerView mRecyclerView = findViewById(R.id.recipe_card_view);
         int orientation = getResources().getConfiguration().orientation;
 
+        //if horizontal
         if (orientation == 2) {
             GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
             mRecyclerView.setLayoutManager(gridLayoutManager);
         }
 
-
+        //if vertical
         if (orientation == 1){
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
             mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
         mAdapter = new MainBakingAdapter(context, this );
         mRecyclerView.setAdapter(mAdapter);
 
+        //build retfofit
         createRetrofitBuilder();
 
     }
@@ -105,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
         RecipeClient recipeClient = retrofit.create(RecipeClient.class);
         Call<List<Recipe>> call = recipeClient.cookingRecpies(Constants.baking_json2);
 
+        //response handling
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
@@ -114,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
                     mAdapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.GONE);
                 }
+                //if response has error display a related toast
                 else {
                     ApiError apiError = ErrorUtils.parseError(response);
                     Toast.makeText(context, apiError.getMessage() , Toast.LENGTH_LONG).show();
@@ -121,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
 
             }
 
+            //on general failure
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
                 Log.i("", "ff" + t.getMessage());
@@ -131,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
 
 
     /**
+     * open a new master flow activity
      * callback for MainBakingAdapter on a recipe click
      * @param clickedOnPos  position of the card
      * @param clickedOnRecipe   the recipe object that was clicked on.

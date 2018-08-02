@@ -28,6 +28,10 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Fragment for displaying recipe ingredients as a list in a viewPager
+ * layout is LinearLayout and there is a click
+ */
 public class IngredientsListFragment extends Fragment {
 
     @BindView(R.id.ingredients_recycler) RecyclerView ingredientRecyclerView;
@@ -51,12 +55,16 @@ public class IngredientsListFragment extends Fragment {
         recipeName = recipe.getName();
         ingredientsList = recipe.getIngredients();
 
+        //LinearLayout instantiation
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         ingredientRecyclerView.setLayoutManager(linearLayoutManager);
         ingredientRecyclerView.setHasFixedSize(true);
+
+        //RecyclerView adapter
         RecyclerIngredientAdapter ingredientRecyclerAdapter = new RecyclerIngredientAdapter(getActivity(), recipe);
         ingredientRecyclerView.setAdapter(ingredientRecyclerAdapter);
 
+        //sharedPref
         SharedPreferences sharedPreferences = getActivity()
                 .getSharedPreferences("Shared_preferences", Context.MODE_PRIVATE);
 
@@ -69,24 +77,16 @@ public class IngredientsListFragment extends Fragment {
         editor.putString("recipe", string_recipe);
         editor.apply();
 
+        //widget click Listener
         btn_widget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getActivity());
-
-                Bundle bundle = new Bundle();
-//
-                int[] appWidgetIds = AppWidgetManager.getInstance(getActivity())
-                        .getAppWidgetIds(new ComponentName(getActivity(), BakingAppWidgetProvider.class));
-
-
+                //lunch an Intent which will be catched in Baking App Widget Service Class.
                 Intent intent = new Intent(getActivity(), BakingAppWidgetProvider.class);
                 intent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
                 int ids[] = AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), BakingAppWidgetService.class));
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
                 getActivity().sendBroadcast(intent);
-
 
                 Toast.makeText(getActivity(), "Widget Updated", Toast.LENGTH_SHORT).show();
             }
