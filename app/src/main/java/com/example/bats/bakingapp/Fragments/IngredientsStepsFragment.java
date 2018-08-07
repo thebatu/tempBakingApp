@@ -1,15 +1,19 @@
 package com.example.bats.bakingapp.Fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.FragmentPagerAdapter;
+
 import com.example.bats.bakingapp.R;
 
 import butterknife.BindView;
@@ -27,11 +31,23 @@ public class IngredientsStepsFragment extends Fragment{
     String recipe;
 
 
+    @SuppressLint("RestrictedApi")
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ingredients_steps_pager_layout, container, false);
         ButterKnife.bind(this, view);
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
 
         // Instantiate a ViewPager and a PagerAdapter.
         recipe = getArguments().getString("recipe_string");
@@ -40,19 +56,45 @@ public class IngredientsStepsFragment extends Fragment{
         tabLayout.setupWithViewPager(mPager);
         mPager.setAdapter(tabsPagerAdapter);
 
+        mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
         return view;
 
     }
+
 
     /**
      * pagerView class to display recipe steps and instructions on phones
      */
     private class TabsPagerAdapter extends FragmentPagerAdapter {
+
         private int NUM_ITEMS = 2;
+
+
 
 
         public TabsPagerAdapter(FragmentManager fm){
             super(fm);
+        }
+
+        public void onBackPressed() {
+
         }
 
         @Override
