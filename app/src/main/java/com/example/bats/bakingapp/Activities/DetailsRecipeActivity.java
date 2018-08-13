@@ -26,13 +26,23 @@ public class DetailsRecipeActivity extends AppCompatActivity implements
     public final String TAG = DetailsStepsActivity.class.getSimpleName();
     private int screenSize;
 
-    // oncreate that checks if display is phone or tablet depending on the size.
+    // onCreate that checks if display is phone or tablet depending on the size.
     // displays either 1 fragment or 2 fragments accordingly.
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent goToMainActivity = new Intent(getApplicationContext(), MainActivity.class);
+        goToMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Will clear out your activity history stack till now
+        startActivity(goToMainActivity);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_recipe);
+
+
         screenSize= getResources().getConfiguration().smallestScreenWidthDp;
         Gson gson = new Gson();
         //get the passed in recipe the user clicked on
@@ -45,11 +55,11 @@ public class DetailsRecipeActivity extends AppCompatActivity implements
 
         if (savedInstanceState == null) {
             if (screenSize < 600) {
-
                 //phones show 1 fragment with a pagerView
                 IngredientsStepsFragment ingredientsStepsFragment = new IngredientsStepsFragment();
                 ingredientsStepsFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().add(R.id.ingredients_steps_fragment, ingredientsStepsFragment).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.ingredients_steps_fragment, ingredientsStepsFragment).addToBackStack(null).commit();
+
 
             } else {
                 //tablets show 2 fragments

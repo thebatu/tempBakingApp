@@ -2,11 +2,11 @@ package com.example.bats.bakingapp.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,17 +14,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.example.bats.bakingapp.Adapter.MainBakingAdapter;
-import com.example.bats.bakingapp.Network.RecipeClient;
 import com.example.bats.bakingapp.Models.Recipe;
+import com.example.bats.bakingapp.Network.RecipeClient;
 import com.example.bats.bakingapp.R;
 import com.example.bats.bakingapp.Utils.ApiError;
 import com.example.bats.bakingapp.Utils.Constants;
 import com.example.bats.bakingapp.Utils.ErrorUtils;
 import com.example.bats.bakingapp.Utils.SimpleIdlingResource;
 import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -138,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
     }
 
 
+
+
     /**
      * open a new master flow activity
      * callback for MainBakingAdapter on a recipe click
@@ -150,6 +155,9 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
         Intent intent = new Intent(this, DetailsRecipeActivity.class);
         intent.putExtra("recipe", gson.toJson(clickedOnRecipe));
         intent.putExtra("recipe_pos", clickedOnPos);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+
+
         startActivity(intent);
 
     }

@@ -31,6 +31,9 @@ public class IngredientsStepsFragment extends Fragment{
     String recipe;
 
 
+    public IngredientsStepsFragment(){}
+
+
     @SuppressLint("RestrictedApi")
     @Nullable
     @Override
@@ -41,10 +44,16 @@ public class IngredientsStepsFragment extends Fragment{
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
+        //listener for clicks on Pager.
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().onBackPressed();
+                assert getFragmentManager() != null;
+                int currentItem = mPager.getCurrentItem();
+                if (currentItem == 0)
+                    mPager.setCurrentItem(1);
+                else
+                    mPager.setCurrentItem(0);
             }
         });
 
@@ -93,9 +102,6 @@ public class IngredientsStepsFragment extends Fragment{
             super(fm);
         }
 
-        public void onBackPressed() {
-
-        }
 
         @Override
         public CharSequence getPageTitle(int position) {

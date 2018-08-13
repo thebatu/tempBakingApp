@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.example.bats.bakingapp.Models.Ingredient;
 import com.example.bats.bakingapp.R;
@@ -80,7 +79,6 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-
         BakingAppWidgetService.startActionUpdateRecipeWidget(context);
 
     }
@@ -88,7 +86,6 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        Toast.makeText( context, "on recieve Provider", Toast.LENGTH_SHORT).show();
         BakingAppWidgetService.startActionUpdateRecipeWidget(context);
 
     }

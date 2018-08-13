@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +17,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bats.bakingapp.Models.Recipe;
+import com.example.bats.bakingapp.Models.Steps;
+import com.example.bats.bakingapp.R;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
-import com.example.bats.bakingapp.Models.Recipe;
-import com.example.bats.bakingapp.Models.Steps;
-import com.example.bats.bakingapp.R;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -81,9 +83,25 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         int orientation = getResources().getConfiguration().orientation;
         int minSize = getResources().getConfiguration().smallestScreenWidthDp;
 
+
+        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+
+        //listener for clicks on Pager.
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                assert getFragmentManager() != null;
+                getActivity().onBackPressed();
+
+            }
+        });
+
         //handle description visible or not depending on orientation
         if (orientation == 2 && minSize < 600) {
             tv_StepDescription.setVisibility(View.GONE);
+
         } else if (orientation == 1) {
             tv_StepDescription.setVisibility(View.VISIBLE);
         }
@@ -205,40 +223,9 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             }
         }
 
-
         simpleExoPlayer.prepare(mediaSource);
         simpleExoPlayer.setPlayWhenReady(true);
 
-//        }
-//        else {
-//            if (savedInstanceState != null){
-//                exoPlayer.requestFocus();
-//
-//                // Create an instance of the ExoPlayer.
-//                TrackSelector trackSelector = new DefaultTrackSelector();
-//                LoadControl loadControl = new DefaultLoadControl();
-//                simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
-//                exoPlayer.setPlayer(simpleExoPlayer);
-//                MediaSource mediaSource;
-//                // Prepare the MediaSource.
-//                String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
-//                if (uri == null) {
-//                    mediaSource = new ExtractorMediaSource(Uri.EMPTY, new DefaultDataSourceFactory(
-//                            getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
-//                }else {
-//                    mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
-//                            getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
-//                }
-//
-//
-//                if (position != C.TIME_UNSET) {
-//                    position = savedInstanceState.getLong("video_play_last_position");
-//                }
-//                simpleExoPlayer.prepare(mediaSource);
-//                simpleExoPlayer.setPlayWhenReady(true);
-//
-//            }
-//        }
     }
 
     @Override
