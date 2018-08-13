@@ -148,9 +148,7 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
                 exoPlayer.setDefaultArtwork(BitmapFactory.decodeResource(getContext().getResources(),R.drawable.novideo));
             }
             tv_StepDescription.setText(savedInstanceState.getString("stepDescription"));
-            String sdafsd = "sdfsdfsdfs";
         }
-
 
         return rootView;
 
