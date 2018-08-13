@@ -10,6 +10,7 @@
         android:layout_height="?android:attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:contentInsetStart="72dp"
+        android:background="@color/colorPrimary"
         app:layout_collapseMode="pin"
         app:navigationIcon="@drawable/left_arrow">
 
@@ -28,7 +29,7 @@
         android:id="@+id/simple_exo_player"
         android:layout_width="0dp"
         android:layout_height="250dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

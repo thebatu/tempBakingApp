@@ -12,31 +12,29 @@ import com.example.bats.bakingapp.R;
  */
 public class DetailsStepsActivity extends AppCompatActivity implements StepDetailFragment.StepChangeClickListener  {
 
-    String step_string;
-    String recipe_string;
-    int recipe_pos;
-
-
+    String stepString;
+    String recipeString;
+    int recipePos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_steps);
 
-        step_string = getIntent().getStringExtra("step");
-        recipe_string = getIntent().getStringExtra("recipe");
-        recipe_pos = getIntent().getIntExtra("position", 0);
+        stepString = getIntent().getStringExtra("step");
+        recipeString = getIntent().getStringExtra("recipe");
+        recipePos = getIntent().getIntExtra("position", 0);
 
         Bundle bundle = new Bundle();
-        bundle.putString("step_string", step_string);
-        bundle.putString("recipe_string", recipe_string);
+        bundle.putString("stepString", stepString);
+        bundle.putString("recipe_string", recipeString);
 
         if (savedInstanceState == null) {
             StepDetailFragment stepDetailFragment = new StepDetailFragment();
             stepDetailFragment.setArguments(bundle);
 
-            stepDetailFragment.setStepsList(recipe_string);
-            stepDetailFragment.setStepData(recipe_pos);
+            stepDetailFragment.setStepsList(recipeString);
+            stepDetailFragment.setStepData(recipePos);
 
             getSupportFragmentManager().beginTransaction().add(R.id.frag_steps, stepDetailFragment).commit();
         }
@@ -49,11 +47,11 @@ public class DetailsStepsActivity extends AppCompatActivity implements StepDetai
     public void stepChangeClickListener(int newPOS) {
 
         Bundle bundle = new Bundle();
-        bundle.putString("recipe_string", recipe_string);
+        bundle.putString("recipe_string", recipeString);
 
         StepDetailFragment stepDetailFragment = new StepDetailFragment();
 
-        stepDetailFragment.setStepsList(recipe_string);
+        stepDetailFragment.setStepsList(recipeString);
         stepDetailFragment.setStepData(newPOS);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frag_steps, stepDetailFragment).commit();
