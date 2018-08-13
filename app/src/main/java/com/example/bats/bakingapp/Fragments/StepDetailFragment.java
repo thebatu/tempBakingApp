@@ -94,7 +94,6 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
             public void onClick(View v) {
                 assert getFragmentManager() != null;
                 getActivity().onBackPressed();
-
             }
         });
 
@@ -151,7 +150,6 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         }
 
         return rootView;
-
     }
 
 
@@ -186,10 +184,8 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         stepsList = recipe_obj.getSteps();
     }
 
-
     //init exo player
     private void initExoPlayer(Uri uri, @Nullable Bundle savedInstanceState){
-//        if (simpleExoPlayer == null) {
         exoPlayer.requestFocus();
 
         // Create an instance of the ExoPlayer.
@@ -245,9 +241,6 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
                 simpleExoPlayer.stop();
                 simpleExoPlayer.release();
             }
-
-
-
         }
     }
 
@@ -292,9 +285,6 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         outState.putParcelableArrayList("stepsReceived", (ArrayList<? extends Parcelable>) stepsList);
         outState.putInt("playerPlayState", simpleExoPlayer.getPlaybackState());
         super.onSaveInstanceState(outState);
-
-
-
 
     }
 }
