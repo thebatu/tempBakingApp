@@ -65,13 +65,6 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
     public StepDetailFragment() {}
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        position = simpleExoPlayer.getCurrentPosition();
-    }
-
-
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -84,38 +77,30 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         int minSize = getResources().getConfiguration().smallestScreenWidthDp;
 
 
-        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        if (orientation == 1 && minSize <= 600) {
+            Toolbar toolbar = rootView.findViewById(R.id.toolbar);
+            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    assert getFragmentManager() != null;
+                    getActivity().onBackPressed();
+                    getActivity().finish();
+                }
+            });
 
-        //listener for clicks on Pager.
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                assert getFragmentManager() != null;
-                getActivity().onBackPressed();
-            }
-        });
+        }
+
 
         //handle description visible or not depending on orientation
         if (orientation == 2 && minSize < 600) {
             tv_StepDescription.setVisibility(View.GONE);
-
-        } else if (orientation == 1) {
-            tv_StepDescription.setVisibility(View.VISIBLE);
         }
 
         tv_StepDescription.setText(tvStepDesciptionString);
 
         position = C.TIME_UNSET;
-
-        //build player if null
-        if (videoURL != null &&  !videoURL.isEmpty()){
-            Uri uri = Uri.parse(videoURL).buildUpon().build();
-
-            initExoPlayer(uri, savedInstanceState);
-
-        }
 
         rightArrow.setOnClickListener(this);
         leftArrow.setOnClickListener(this);
@@ -186,62 +171,98 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
 
     //init exo player
     private void initExoPlayer(Uri uri, @Nullable Bundle savedInstanceState){
-        exoPlayer.requestFocus();
+        if (simpleExoPlayer == null) {
+            exoPlayer.requestFocus();
 
-        // Create an instance of the ExoPlayer.
-        TrackSelector trackSelector = new DefaultTrackSelector();
-        LoadControl loadControl = new DefaultLoadControl();
-        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
-        exoPlayer.setPlayer(simpleExoPlayer);
-        MediaSource mediaSource;
-        // Prepare the MediaSource.
-        String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
-        if (uri == null) {
-            mediaSource = new ExtractorMediaSource(Uri.EMPTY, new DefaultDataSourceFactory(
-                    getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
-        }else {
-            mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
-                    getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
-        }
-
-        if (savedInstanceState != null){
-            Long l = savedInstanceState.getLong("video_play_last_position");
-            simpleExoPlayer.seekTo(l);
-
-            int playerPlayBackState = savedInstanceState.getInt("playerPlayState");
-            Log.d(TAG, "initExoPlayer:   "  + playerPlayBackState);
-        }
-        else {
-            if (position != C.TIME_UNSET) {
-                simpleExoPlayer.seekTo(position);
+            // Create an instance of the ExoPlayer.
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+            exoPlayer.setPlayer(simpleExoPlayer);
+            MediaSource mediaSource;
+            // Prepare the MediaSource.
+            String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
+            if (uri == null) {
+                mediaSource = new ExtractorMediaSource(Uri.EMPTY, new DefaultDataSourceFactory(
+                        getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+            }else {
+                mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
+                        getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
             }
-        }
 
-        simpleExoPlayer.prepare(mediaSource);
-        simpleExoPlayer.setPlayWhenReady(true);
+            if (savedInstanceState != null){
+                Long l = savedInstanceState.getLong("video_play_last_position");
+                simpleExoPlayer.seekTo(l);
+
+                int playerPlayBackState = savedInstanceState.getInt("playerPlayState");
+                Log.d(TAG, "initExoPlayer:   "  + playerPlayBackState);
+            }
+            else {
+                if (position != C.TIME_UNSET) {
+                    simpleExoPlayer.seekTo(position);
+                }
+            }
+
+            simpleExoPlayer.prepare(mediaSource);
+            simpleExoPlayer.setPlayWhenReady(true);
+        }
 
     }
+
+    // before API lvl 24 we release the player early coz there is no guarentee the system will call
+    //onStop() so we terminate on onPause()
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (simpleExoPlayer != null){
+            position = simpleExoPlayer.getCurrentPosition();
+        }
+
+        releasePlayer();
+    }
+
 
     @Override
     public void onResume() {
         super.onResume();
-        if (position != 0 ){
+        if (uri != null) {
             initExoPlayer(uri, bundle);
-
         }
-        initExoPlayer(uri, bundle);
+        if (simpleExoPlayer != null) {
+            Long mPosition = simpleExoPlayer.getCurrentPosition();
+            if (mPosition!= C.TIME_UNSET)
+                simpleExoPlayer.seekTo(mPosition);
+        }
     }
 
+
     //stop exo player
+    //activity no longer visible
     @Override
     public void onStop() {
         super.onStop();
         if (videoURL != null) {
             if (!videoURL.equals("")) {
-                simpleExoPlayer.stop();
-                simpleExoPlayer.release();
+                //Activity no longer visible on API +24
+                if (Util.SDK_INT >= 24 && simpleExoPlayer != null){
+                    releasePlayer();
+                }
+
             }
         }
+    }
+
+    /**
+     * Store video position and stop, release and nullify the player.
+     */
+    private void releasePlayer(){
+        if (simpleExoPlayer != null) {
+            position = simpleExoPlayer.getCurrentPosition();
+            simpleExoPlayer.stop();
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
+        }
+
     }
 
     //setter for the URL and URI of a video
@@ -275,15 +296,20 @@ public class StepDetailFragment extends Fragment implements View.OnClickListener
         void  stepChangeClickListener(int newPOS);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("videoURL", videoURL);
         outState.putString("tvStepDesciptionString", tvStepDesciptionString);
-        long position = simpleExoPlayer.getCurrentPosition();
+        //long position = simpleExoPlayer.getCurrentPosition();
         outState.putLong("video_play_last_position", position);
         outState.putParcelableArrayList("stepsReceived", (ArrayList<? extends Parcelable>) stepsList);
-        outState.putInt("playerPlayState", simpleExoPlayer.getPlaybackState());
+        //outState.putInt("playerPlayState", simpleExoPlayer.getPlaybackState());
         super.onSaveInstanceState(outState);
 
     }

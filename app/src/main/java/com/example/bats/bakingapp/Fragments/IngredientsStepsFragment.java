@@ -1,6 +1,7 @@
 package com.example.bats.bakingapp.Fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.bats.bakingapp.Activities.MainActivity;
 import com.example.bats.bakingapp.R;
 
 import butterknife.BindView;
@@ -30,9 +32,7 @@ public class IngredientsStepsFragment extends Fragment{
 
     String recipe;
 
-
     public IngredientsStepsFragment(){}
-
 
     @SuppressLint("RestrictedApi")
     @Nullable
@@ -50,8 +50,11 @@ public class IngredientsStepsFragment extends Fragment{
             public void onClick(View v) {
                 assert getFragmentManager() != null;
                 int currentItem = mPager.getCurrentItem();
-                if (currentItem == 0)
-                    mPager.setCurrentItem(1);
+                if (currentItem == 0) {
+                    Intent goToMainActivity = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+                    goToMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(goToMainActivity);
+                }
                 else
                     mPager.setCurrentItem(0);
             }

@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,8 +155,6 @@ public class MainActivity extends AppCompatActivity implements MainBakingAdapter
         intent.putExtra("recipe", gson.toJson(clickedOnRecipe));
         intent.putExtra("recipePos", clickedOnPos);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
-
-
         startActivity(intent);
 
     }

@@ -36,7 +36,7 @@ public class DetailsStepsActivity extends AppCompatActivity implements StepDetai
             stepDetailFragment.setStepsList(recipeString);
             stepDetailFragment.setStepData(recipePos);
 
-            getSupportFragmentManager().beginTransaction().add(R.id.frag_steps, stepDetailFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frag_steps, stepDetailFragment).commit();
         }
 
     }
